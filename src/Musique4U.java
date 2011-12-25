@@ -45,14 +45,41 @@ public class Musique4U{
 		boolean quit = false;
 		//string to store tempory input
 		String temp;
+		//stores the option the user have selected
+		int choice;
 		
 		//Greeting message
 		System.out.println("Hello, "+user+", what do you want to do today?");
 		
 		while (!quit){
-			System.out.println("Options:\n1. Manage Playlist\n2. Search\n3. Sharing\n4. Quit");
-			System.out.print("Choice: ");
-			temp = Integer.parseInt(in.next());
+			try{
+				//Give user options
+				System.out.println("Options:\n1. Manage Playlist\n2. Search\n3. Sharing\n4. Quit");
+				
+				//Prompt looking prompt
+				System.out.print(User+": ");
+				//get user input
+				temp = in.next();
+				//convert the inputted String into int type
+				choice = Integer.parseInt(temp);
+				
+				if (choice == 1){
+					System.out.println("TODO: Manage Playlist");
+				} else if (choice == 2){
+					System.out.println("TODO: Media Search");
+				}else if (choice == 3){
+					System.out.println("TODO: Media Share");
+				}else if (choice == 4){
+					System.out.println("The application will now quit!");
+					quit = true;
+				} else {
+					System.out.println("The choice that you have specified is invalid!");
+				}
+				
+			} catch (InputMismatchException mismatch){
+				System.out.println("The value \"+"temp"+\" you have entered is not a valid integer.\nPlease input an integer!");
+			}
+			
 		}
 	}
 	
