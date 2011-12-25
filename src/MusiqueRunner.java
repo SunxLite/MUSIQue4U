@@ -1,5 +1,5 @@
 /*
-Class Name: Runner.java
+Class Name: MusiqueRunner.java
 Author: Sunny Li, Leo Liu
 Date: Dec 16, 2011
 School: A.Y. Jackson SS
@@ -8,11 +8,9 @@ IDE used: Notepad++
 Purpose: This is the runner class which runs the main program.
 */
 
-public class Runner{
-	//Main method
+public class MusiqueRunner{
 	public static void main(String[] args){
-		//Test message
-		System.out.println("Program starter...");
-		Music run = new Music(); //create one instance of music...
+		//create one instance of the Musique4U program
+		Musique4U run = new Musique4U();
 	}
 }
