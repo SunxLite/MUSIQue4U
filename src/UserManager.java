@@ -14,7 +14,7 @@ class UserManager{
 	//global Scanner
 	static Scanner in = new Scanner(System.in);
 	//tempory user storage
-	static User user; //?!?
+	static User user; // PUT THE USER INSIDE METHOD... JUST TESTING!!
 	
 	static User getUser(){
 		//prompt the user to login
@@ -40,18 +40,78 @@ class UserManager{
 					System.out.println("The choice that you have specified is invalid.");
 				}
 				
+				//if (user != null) //this is needed for GUI... if there is one.
 				return user;
 				
 			} catch (InputMismatchException mismatch){
-				System.out.println("The value \""+temp+"\" you specified is not an integer.\nPlease try again!");
+				System.out.println("The value \""+temp+"\" you specified is not an integer.\nPlease input an integer!");
 			}
 		}
-		
 	}
+	
 	static User login(){
-		//send info to filereader... when confirmed that the data matches, call the file reader again and read in user's data.
+		boolean hasUser = false;
+		String username, pass;
+		
+		System.out.println("Login Form");
+		
+		while (!hasUser){
+			System.out.print("Username: ");
+			username = in.next();
+			System.out.print("Password: ");
+			pass = in.next();
+			
+			if (FileManger.userExist(username)){
+				if (FileManger.checkPass(username, pass)){
+					user = FileManger.loadUser(username);
+					hasUser = true;
+				}else{
+					System.out.println("Incorrect Password!");
+				}
+			}else{
+				System.out.println("The username you have specified does not exist!");
+			}
+			
+			/*if (username.equalsIgnoreCase("back") || pass.equealsIgnoreCase("back")){
+				System.out.println("Back to user menu.");
+				return null;
+			}*/
+		}
+		return user;
 	}
+	
 	static User register(){
-		//make the user object in here and return it.
+		boolean regComplete = false;
+		String data[] = new String[5]; //id, username, password, name, age
+		data[0] = "-1"; //default for unknown new ID.
+		
+		System.out.println("Please fill in the information below to register a new user.");
+		
+		while(!regComplete){
+			
+			System.out.print("Desired Username: ");
+			data[1] = in.next();
+			
+			if (!FileManager.userExist(data[1])){
+				
+				System.out.print("Password: ");
+				data[2] = in.next();
+				System.out.print("Name: ");
+				data[3] = in.next();
+				System.out.print("Age: ");
+				data[4] = in.next();
+				/*System.out.print("Gender: ");
+				data[4] = in.next();*/
+				
+				//Create the new user
+				user = new User(data);
+				FileManager.addUser(user);
+				regComplete = true;
+				
+			}else{
+				System.out.println("The username that you want already exist!\nPlease try another one.");
+			}
+		}
+		return user;
 	}
 }
