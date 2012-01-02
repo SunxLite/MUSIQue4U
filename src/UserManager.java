@@ -82,31 +82,34 @@ class UserManager{
 	
 	static User register(){
 		boolean regComplete = false;
-		String data[] = new String[5]; //id, username, password, name, age
-		data[0] = "-1"; //default for unknown new ID.
+		String username, password, name;
+		int age;
 		
 		System.out.println("Please fill in the information below to register a new user.");
 		
 		while(!regComplete){
 			
 			System.out.print("Desired Username: ");
-			data[1] = in.next();
+			username = in.next();
 			
-			if (!FileManager.userExist(data[1])){
+			if (!FileManager.userExist(username)){
 				
 				System.out.print("Password: ");
-				data[2] = in.next();
+				password = in.next();
 				System.out.print("Name: ");
-				data[3] = in.next();
+				name = in.next();
 				System.out.print("Age: ");
-				data[4] = in.next();
-				/*System.out.print("Gender: ");
-				data[4] = in.next();*/
+				try{
+				age = Integer.parseInt(in.next());
 				
 				//Create the new user
-				user = new User(data);
+				user = new User(-1, username, password, name, age);
 				FileManager.addUser(user);
 				regComplete = true;
+				
+				}catch(InputMismatchException mismatch){
+					System.out.println("You did not input an integer..\nPlease re-register!");
+				}
 				
 			}else{
 				System.out.println("The username that you want already exist!\nPlease try another one.");

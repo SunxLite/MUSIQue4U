@@ -15,15 +15,14 @@ class User{
 	private String password;
 	private String name;
 	private int age;
-	//private char gender; // this is not really necessary...
+	//private char gender; //unnecessary field.
 	
-	public User(String[] data){ //User data passed in from String array
-		id = Integer.parseInt(data[0]);
-		username = data[1];
-		password = data[2];
-		name = data[3];
-		age = Integer.parseInt(data[4]);
-		//gender = data[4].charAt(0);
+	public User(int id, String username, String password, String name, int age){ //User data passed in from String array
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.age = age;
 	}
 	
 	public String toString(){

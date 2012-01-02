@@ -1,2 +1,2 @@
-Musique4U is a simple database program coded in Java that can organize your music playlist by Title, Artist, Genere, and Year released.
+Musique4U is a simple database program in Java that organizes your music playlist by Title, Artist, Genere, and Year released. It features an user login system which enable multiple profile, sharing, etc..
 by Sunny Li, and Leo Liu.
