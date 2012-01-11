@@ -10,14 +10,14 @@ Purpose: A class library to manage media in playlists
 
 class PlaylistManager{
 	
-	//this is the nitialize method
-	static Playlist initialize(User user){
+	//initialization method
+	static Playlist[] initialize(User user){
 		return FileManager.loadPlaylist(user);
 	}
 	
 	static void display(Playlist[] playlist){
 		System.out.println("You have the following playlist:");
-		for (int i = 0; i < playlist.length, i++){
+		for (int i = 0; i < playlist.length; i++){
 			System.out.println(" + "+playlist[i]);
 		}
 	}

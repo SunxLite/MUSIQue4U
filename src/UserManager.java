@@ -8,12 +8,13 @@ IDE used: Notepad++
 Purpose: A library class that manages the user object
 */
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 class UserManager{
 	//global Scanner
 	static Scanner in = new Scanner(System.in);
-	//tempory user storage
+	//Temporary user storage
 	static User user; // PUT THE USER INSIDE METHOD... JUST TESTING!!
 	
 	static User getUser(){
@@ -21,7 +22,7 @@ class UserManager{
 		System.out.println("Please login:\n1.Existing User\n2.Register");
 		
 		boolean selected = false;
-		String temp;
+		String temp = null;
 		int choice;
 		
 		while(!selected){
@@ -40,13 +41,11 @@ class UserManager{
 					System.out.println("The choice that you have specified is invalid.");
 				}
 				
-				//if (user != null) //this is needed for GUI... if there is one.
-				return user;
-				
 			} catch (InputMismatchException mismatch){
 				System.out.println("The value \""+temp+"\" you specified is not an integer.\nPlease input an integer!");
 			}
 		}
+		return user;
 	}
 	
 	static User login(){
