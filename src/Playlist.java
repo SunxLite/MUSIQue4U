@@ -6,11 +6,14 @@ School: A.Y. Jackson SS
 Computer used: Sunny's Computer
 IDE used: Eclipse
 Purpose: The playlist object.
+			-Each playlist requires an unique name
+			-The playlist contains strands of media objects which can be added, remove or modify.
  */
 
 class Playlist {
 
 	// Parameters
+	// No Unique ID for playlist, select it by name
 	private String name;
 	private Media[] media;
 
@@ -29,15 +32,15 @@ class Playlist {
 		for (int i = 0; i < media.length; i++) {
 			temp[i] = media[i];
 		}
-		temp[media.length] = item;
+		temp[media.length] = item; // append the provided media into the playlist
 
 		// overwrite
 		media = temp;
 	}
 
 	void removeMedia(Media item) {
-		// this method will remove matching item from the playlist
-		// can be used to mass remove album, artist, etc..
+		// the Media item here is a temporary object that contains the same parameter of items that needs to be removed.
+		// can be used to mass remove Media with the same title, album, artist, etc..
 
 		// remove matching item(s)...
 		int removed = 0;
@@ -62,11 +65,11 @@ class Playlist {
 		media = temp;
 	}
 
-	void editMedia(Media initial, Media replacement) {
+	void editMedia(Media initial, Media replacement) { //This one makes use of Media's unique id
 		// replace one for another..
 		boolean found = false;
 		for (int i = 0; i < media.length && !found; i++) {
-			if (media[i].equals(initial)) {
+			if (media[i].equals(initial)) { //Let the loop finish since this program allows duplicated media
 				media[i] = replacement;
 			}
 		}
@@ -74,11 +77,12 @@ class Playlist {
 
 	// Getter
 	Media[] getList() {
-		return media;
+		return media;	//The Media's within the playlist
 	}
 
 	// Object Name
 	public String toString() {
-		return name;
+		return name;	//Playlist name
 	}
+
 }

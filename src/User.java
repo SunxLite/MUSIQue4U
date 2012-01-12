@@ -6,19 +6,20 @@ School: A.Y. Jackson SS
 Computer used: Sunny's Computer
 IDE used: Eclipse
 Purpose: Template for the User object.
+			-The user object contains an unique ID and username
+			-Personal information including name and age
+			-Also a password to keep profile secure from vandalism
  */
 
 class User {
-
+	// keep these parameters secretive...
 	private int id;
 	private String username;
 	private String password;
 	private String name;
 	private int age;
 
-	// private char gender; //unnecessary field.
-
-	public User(int id, String username, String password, String name, int age) { // User data passed in from String array
+	public User(int id, String username, String password, String name, int age) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -26,27 +27,32 @@ class User {
 		this.age = age;
 	}
 
-	public String toString() {
+	// GETTERS BELOW
+	public String toString() { //same as getName()
+		return name;
+	}
+	
+	String info() {
 		return "ID: " + id + "  |  Username: " + username + "  |  Name: " + name + "  |  Age: " + age;
 	}
 
-	public int getID() {
+	int getID() {
 		return id;
 	}
 
-	public String getUsername() {
+	String getUsername() {
 		return username;
 	}
 
-	public String getPassword() {
+	String getPassword() {
 		return password;
 	}
 
-	public String getName() {
+	String getName() {
 		return name;
 	}
 
-	public int getAge() {
+	int getAge() {
 		return age;
 	}
 

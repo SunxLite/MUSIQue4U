@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<data>
+	<user> 	
+		<id>1</id>			
+		<username>Admin</username>		
+		<pass>login</pass>	
+		<name>nammee</name>
+		<age>18</age>
+		
+	</user>
+	<user>
+		<id>2</id>
+		<username>leo123</username>
+		<pass>PASSWORD</pass>
+		<name>Leo</name>
+		<age>17</age>
+	</user>
+	<user>
+		<id>3</id>
+		<username>littlepig</username>
+		<pass>lite</pass>
+		<name>sunn?!?ny</name>
+		<age>20</age>
+	</user>
+</data>

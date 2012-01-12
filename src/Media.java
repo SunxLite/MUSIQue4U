@@ -9,10 +9,11 @@ Purpose: Template for the Media object, which is abstract
 		 and is inherited by either Music or Video object.
  */
 
-abstract class Media { //====================ABSTRACT CLASS!!!====================
+abstract class Media {
+	// Hold common data
 	private int id;
-	private String title;
-	private String genre;
+	protected String title;
+	protected String genre;
 
 	public Media(int id, String title, String genre) {
 		this.id = id;
@@ -20,13 +21,9 @@ abstract class Media { //====================ABSTRACT CLASS!!!==================
 		this.genre = genre;
 	}
 
-	public boolean equals(Media other) {
-		if (title.equals(other.title) && genre.equals(other.genre))
-			return true;
-		return false;
-	}
+	abstract boolean equals(Media other);
 
-	public String toString() {
+	public String toString() { // This is for subclasses...
 		return "ID: " + id + " | Title: " + title + " | Genre: " + genre;
 	}
 }

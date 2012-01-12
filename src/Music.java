@@ -18,4 +18,31 @@ class Music extends Media {
 		this.album = album;
 	}
 
+	boolean equals(Media other) {
+		// Note: Media object may not contain all parameters such as when a Media is created for use with search.
+
+		if (!(title == null || other.title == null)) {
+			if (!this.title.equalsIgnoreCase(other.title)) {
+				return false;
+			}
+		}
+		if (!(genre == null || other.genre == null)) {
+			if (!this.genre.equalsIgnoreCase(other.genre)) {
+				return false;
+			}
+		}
+		if (!(artist == null || ((Music) other).artist == null)) {
+			if (!this.artist.equalsIgnoreCase(((Music) other).artist)) {
+				return false;
+			}
+		}
+		if (!(album == null || ((Music) other).album == null)) {
+			if (!this.album.equalsIgnoreCase(((Music) other).album)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }
