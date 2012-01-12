@@ -8,11 +8,14 @@ IDE used: Eclipse
 Purpose: Template for the Music object, which extends Media
  */
 
-class Music extends Media{
+class Music extends Media {
+	private String artist;
+	private String album;
 
-	public Music(int id, String title, String genre) {
+	public Music(int id, String title, String genre, String artist, String album) {
 		super(id, title, genre);
-		// TODO Auto-generated constructor stub
+		this.artist = artist;
+		this.album = album;
 	}
 
 }

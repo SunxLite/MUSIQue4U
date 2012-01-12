@@ -13,13 +13,11 @@ abstract class Media { //====================ABSTRACT CLASS!!!==================
 	private int id;
 	private String title;
 	private String genre;
-	private static int total; // this can keep track of the total number of Media object initialized
 
 	public Media(int id, String title, String genre) {
 		this.id = id;
 		this.title = title;
 		this.genre = genre;
-		total++;
 	}
 
 	public boolean equals(Media other) {

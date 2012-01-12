@@ -9,10 +9,13 @@ Purpose: Template for the Video object, which extends Media
  */
 
 public class Video extends Media {
+	private double duration;
+	private String rating;
 
-	public Video(int id, String title, String genre) {
+	public Video(int id, String title, String genre, double duration, String rating) {
 		super(id, title, genre);
-		// TODO Auto-generated constructor stub
+		this.duration = duration;
+		this.rating = rating;
 	}
 
 }
