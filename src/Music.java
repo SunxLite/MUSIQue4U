@@ -3,8 +3,8 @@ Class Name: Music.java
 Author: Sunny Li, Leo Liu
 Date: Jan 11, 2011
 School: A.Y. Jackson SS
-Computer used: Sunny's Computer
-IDE used: Eclipse
+Computer used: Sunny's Computer, TDSB
+IDE used: Eclipse, JGrasp
 Purpose: Template for the Music object, which extends Media
  */
 
@@ -45,4 +45,12 @@ class Music extends Media {
 		return true;
 	}
 
+	// GETTERS
+	String getArtist() {
+		return artist;
+	}
+
+	String getAlbum() {
+		return album;
+	}
 }

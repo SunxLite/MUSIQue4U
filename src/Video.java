@@ -3,13 +3,13 @@ Class Name: Music.java
 Author: Sunny Li, Leo Liu
 Date: Jan 11, 2011
 School: A.Y. Jackson SS
-Computer used: Sunny's Computer
-IDE used: Eclipse
+Computer used: Sunny's Computer, TDSB
+IDE used: Eclipse, JGrasp
 Purpose: Template for the Video object, which extends Media
  */
 
 class Video extends Media {
-	// Double is an object that wraps double, therefore allowing null values
+	// Double is an object that wraps primitive type double, therefore allowing null values
 	private Double duration;
 	private String rating;
 
@@ -46,4 +46,12 @@ class Video extends Media {
 		return true;
 	}
 
+	// GETTERS
+	double getDuration() {
+		return duration;
+	}
+
+	String getRating() {
+		return rating;
+	}
 }

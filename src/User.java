@@ -28,10 +28,10 @@ class User {
 	}
 
 	// GETTERS BELOW
-	public String toString() { //same as getName()
+	public String toString() { // same as getName()
 		return name;
 	}
-	
+
 	String info() {
 		return "ID: " + id + "  |  Username: " + username + "  |  Name: " + name + "  |  Age: " + age;
 	}

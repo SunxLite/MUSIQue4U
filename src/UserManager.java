@@ -4,7 +4,7 @@ Author: Sunny Li, Leo Liu
 Date: Dec 20, 2011
 School: A.Y. Jackson SS
 Computer used: Sunny's Computer
-IDE used: Notepad++
+IDE used: Eclipse
 Purpose: A library class that manages the user object
 			It contains methods that specifically:
 			- presents options for the user to log-in

@@ -4,7 +4,7 @@ Author: Sunny Li, Leo Liu
 Date: Dec 27, 2011
 School: A.Y. Jackson SS
 Computer used: Sunny's Computer
-IDE used: Notepad++
+IDE used: Eclipse
 Purpose: A class library to manage media in playlists
 			-it has methods that grabs the user's personal playlist
 			-it includes multiple display methods that displays the specific data provided
@@ -30,14 +30,14 @@ class PlaylistManager {
 	static void display(Playlist playlist) {
 		System.out.println("All your media in the playlist " + playlist);
 		Media[] media = playlist.getList();
-		display(media); //makes use of the method below
+		display(media); // makes use of the method below
 	}
 
-	//display the details of a specified array of media objects
+	// display the details of a specified array of media objects
 	static void display(Media[] media) {
 		System.out.println("Detailed Information:");
 		for (int i = 0; i < media.length; i++) {
-			System.out.println(media[i]); //what does it print?
+			System.out.println(media[i]); // what does it print?
 		}
 	}
 

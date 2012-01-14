@@ -3,8 +3,8 @@ Class Name: Playlist.java
 Author: Sunny Li, Leo Liu
 Date: Dec 31, 2011
 School: A.Y. Jackson SS
-Computer used: Sunny's Computer
-IDE used: Eclipse
+Computer used: Sunny's Computer, TDSB
+IDE used: Eclipse, JGrasp
 Purpose: The playlist object.
 			-Each playlist requires an unique name
 			-The playlist contains strands of media objects which can be added, remove or modify.
@@ -65,11 +65,11 @@ class Playlist {
 		media = temp;
 	}
 
-	void editMedia(Media initial, Media replacement) { //This one makes use of Media's unique id
+	void editMedia(Media initial, Media replacement) { // This one makes use of Media's unique id
 		// replace one for another..
 		boolean found = false;
 		for (int i = 0; i < media.length && !found; i++) {
-			if (media[i].equals(initial)) { //Let the loop finish since this program allows duplicated media
+			if (media[i].equals(initial)) { // Let the loop finish since this program allows duplicated media
 				media[i] = replacement;
 			}
 		}
@@ -77,12 +77,21 @@ class Playlist {
 
 	// Getter
 	Media[] getList() {
-		return media;	//The Media's within the playlist
+		return media; // The Media's within the playlist
 	}
 
 	// Object Name
 	public String toString() {
-		return name;	//Playlist name
+		return name; // Playlist name
+	}
+
+	// Check if the playlist matches by checking its unique name
+	public boolean equals(Playlist other) {
+		if (name.equals(other.name)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
