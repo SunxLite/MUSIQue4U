@@ -22,4 +22,11 @@
 		<name>sunn?!?ny</name>
 		<age>20</age>
 	</user>
+<user>
+<id>4</id>
+<username>asdf</username>
+<pass>jkl;</pass>
+<name>&gt;_&lt;</name>
+<age>9</age>
+</user>
 </data>

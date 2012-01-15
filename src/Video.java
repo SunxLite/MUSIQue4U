@@ -46,6 +46,22 @@ class Video extends Media {
 		return true;
 	}
 
+	// Compare Methods
+	int compareDuration(Video other) {
+		double result = this.duration - other.duration;
+		if (result > 0) {
+			return 1;
+		} else if (result < 0) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
+	
+	int compareRating(Video other){ //Just Alphabetically compare it
+		return this.rating.compareToIgnoreCase(other.rating);
+	}
+
 	// GETTERS
 	double getDuration() {
 		return duration;

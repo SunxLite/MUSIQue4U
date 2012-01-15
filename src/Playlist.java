@@ -8,6 +8,7 @@ IDE used: Eclipse, JGrasp
 Purpose: The playlist object.
 			-Each playlist requires an unique name
 			-The playlist contains strands of media objects which can be added, remove or modify.
+			-TODO: Try make it return boolean so it confirms success
  */
 
 class Playlist {
@@ -18,6 +19,10 @@ class Playlist {
 	private Media[] media;
 
 	// Initializer
+	public Playlist() {
+		//for temporary Media arrays
+	}
+	
 	public Playlist(String name, Media[] media) {
 		this.name = name;
 		this.media = media;
@@ -25,6 +30,7 @@ class Playlist {
 
 	// Methods
 	void addMedia(Media item) {
+		//TODO: Check if the object is null
 		// This method will append a data to the list by creating a new list and overwriting it
 		Media[] temp = new Media[media.length + 1];
 

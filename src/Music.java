@@ -44,6 +44,15 @@ class Music extends Media {
 
 		return true;
 	}
+	
+	//Compare Methods
+	int compareArtist(Music other){
+		return this.artist.compareToIgnoreCase(other.artist);
+	}
+	
+	int compareAlbum(Music other){
+		return this.artist.compareToIgnoreCase(other.artist);
+	}
 
 	// GETTERS
 	String getArtist() {

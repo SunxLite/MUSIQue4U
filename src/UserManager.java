@@ -17,9 +17,9 @@ import java.util.Scanner;
 
 class UserManager {
 	// global Scanner since this is going to be used throughout
-	static Scanner in = new Scanner(System.in);
+	private static Scanner in = new Scanner(System.in);
 	// Temporary user storage - since it's used in multiple methods
-	static User user;
+	private static User user;
 
 	// Give sign-in options to user
 	static User getUser() {
@@ -119,10 +119,13 @@ class UserManager {
 					age = Integer.parseInt(in.next());
 
 					// Create the new user
-					user = new User(-1, username, password, name, age);
+					user = new User(-1, username, password, name, age); // -1 is a dummy ID
 					FileManager.addUser(user);
-					if (FileManager.userExist(username))
+					if (FileManager.userExist(username)) {
 						regComplete = true;
+						// Reload the user with correct corresponding ID
+						user = FileManager.loadUser(username);
+					}
 
 				} catch (NumberFormatException mismatch) {
 					System.out.println("You did not input an integer..\nPlease re-enter your information");

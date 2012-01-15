@@ -8,10 +8,12 @@ IDE used: Notepad++
 Purpose: Read in XML file data
 */
 
+/*
 import javax.xml.parsers.DocumentBuilderFactory; //Used to Create DocumentBuilder
 import javax.xml.parsers.DocumentBuilder; //Used to build document
 import org.w3c.dom.*; //Document Object Model is an API to read XML document
 import java.io.File; //File IO
+*/
 
 public class OpenXML{
 	public static void main(String[] args){

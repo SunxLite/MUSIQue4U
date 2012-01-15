@@ -31,8 +31,8 @@ public class FileManager {
 	private static DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 	private static DocumentBuilder docBuilder = null; // Has to initialize inside method to catch ParserConfigurationException
 	// Source File
-	// private static File usrFile = new File("data/User.xml"); // Eclipse
-	private static File usrFile = new File("../data/User.xml"); // JGrasp
+	private static File usrFile = new File("data/User.xml"); // Eclipse
+	// private static File usrFile = new File("../data/User.xml"); // JGrasp
 	private static Document doc = null; // catch IOException in method
 
 	// Testing utility - Skip this method
@@ -386,14 +386,11 @@ public class FileManager {
 	private static int getLastID() {
 		String returningID = "";
 		try {
-			DocumentBuilder documentBuilder = docBuilderFactory.newDocumentBuilder();
 			Document docu = docBuilder.parse(usrFile);
 			NodeList nList = docu.getElementsByTagName("user");
 			Node lastNode = (Node) nList.item((nList.getLength() - 1));
 			Element lastElement = (Element) lastNode;
 			returningID = getTagValue("id", lastElement);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

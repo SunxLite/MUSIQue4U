@@ -10,7 +10,6 @@ Purpose: Template for the Media object, which is abstract
  */
 
 abstract class Media {
-	// Hold common data
 	private int id;
 	protected String title;
 	protected String genre;
@@ -23,22 +22,31 @@ abstract class Media {
 		total++;
 	}
 
-	// GETTERS
-	int getTotal() {
-		return total;
+	abstract boolean equals(Media other);
+
+	public String toString() { // This is for subclasses... if ever needed
+		return "ID: " + id + " | Title: " + title + " | Genre: " + genre;
 	}
 
-	String getGenre() {
-		return genre;
+	//Compare Methods, inherited by subclasses
+	int compareTitle(Media other){
+		return this.title.compareToIgnoreCase(other.title);
+	}
+	
+	int compareGenre(Media other){
+		return this.genre.compareToIgnoreCase(other.title);
+	}
+	
+	// GETTERS, inherited
+	int getTotal() {
+		return total;
 	}
 
 	String getTitle() {
 		return title;
 	}
-
-	abstract boolean equals(Media other);
-
-	public String toString() { // This is for subclasses... if ever needed
-		return "ID: " + id + " | Title: " + title + " | Genre: " + genre;
+	
+	String getGenre() {
+		return genre;
 	}
 }

@@ -78,11 +78,57 @@ class PlaylistManager {
 		return items;
 	}
 
+	private static Media[] sanitize(Media[] items, String[] spec) {
+		// Get Parameters
+		String subClass = spec[0]; // Assuming subclass is always specified first, which it should.
 
+		// Filter: Check whether the client wants to sort with secondary spec so to cast it down, null when its primary spec
+		// It uses a array instead of a single String because it allows additional class to be added with the same parameter
+		if (subClass.equalsIgnoreCase("Music") || subClass.equalsIgnoreCase("Video")) {
+
+			// for casting down into its respected objects, and put it into playlist since it has pre-written methods
+			// Playlist secondary = null; TODO: Check this..
+			Playlist valid = new Playlist();
+
+			if (subClass.equalsIgnoreCase("Music")) {
+				for (int i = 0; i < items.length; i++) {
+					if (items[i] instanceof Music) { // Use of Abstraction
+						valid.addMedia((Music) items[i]); // TODO: See if casting works.. not required.
+					}
+				}
+			} else if (subClass.equalsIgnoreCase("Video")) {
+				for (int i = 0; i < items.length; i++) {
+					if (items[i] instanceof Video) {
+						valid.addMedia((Video) items[i]);
+					}
+				}
+			}
+
+			// Retrieve the secondary objects, there should be a shorter way but I forgot..
+			Playlist[] toArr = { valid };
+			items = getMedia(toArr);
+		}
+
+		return items;
+	}
 
 	// ============================== SEARCH ==============================
 	static Media[] search(Playlist[] playlists, String[] req) {
 		Media[] given = getMedia(playlists);
+		given = sanitize(given, req);
+
+		//The item we are looking for
+		Media find;
+		
+		find = new Music(0, "a", "b", "c", "d");
+		find = new Video(0, "a", "b", 1.1, "d");
+		
+		for (int i = 0; i < given.length; i++) {
+			if (given[i].equals(find)) { // When it matches what the user specified
+
+			}
+		}
+
 		Media[] found = null;
 		return found;
 	}
@@ -94,38 +140,8 @@ class PlaylistManager {
 
 		// get all the Media object that will be sorted
 		Media[] items = getMedia(playlists);
-
-		// Get Sort Parameters
-		String subClass = req[0]; // this allows additional class to be added with the same type name
-		// String type = req[1]; //Not used in this method..
-
-		// Filter: Check whether the client wants to sort with secondary spec so to cast it down, null when its primary spec
-		// It uses a array instead of a single String because it allows additional class to be added with the same parameter
-		if (subClass.equalsIgnoreCase("Music") || subClass.equalsIgnoreCase("Video")) {
-
-			// for casting down into its respected objects, and put it into playlist since it has pre-written methods
-			// Playlist secondary = null; TODO: Check this..
-			Playlist secondary = new Playlist();
-
-			if (subClass.equalsIgnoreCase("Music")) {
-				for (int i = 0; i < items.length; i++) {
-					if (items[i] instanceof Music) { // Use of Abstraction
-						secondary.addMedia((Music) items[i]); // TODO: See if casting works..
-					}
-				}
-			} else if (subClass.equalsIgnoreCase("Video")) {
-				for (int i = 0; i < items.length; i++) {
-					if (items[i] instanceof Video) {
-						secondary.addMedia((Video) items[i]);
-					}
-				}
-			}
-
-			// Retrieve the secondary objects, there should be a shorter way but I forgot it..
-			Playlist[] sec = { secondary };
-			items = getMedia(sec);
-
-		}
+		// Make items compliant to its subclass if specified
+		items = sanitize(items, req);
 
 		// Now all media sort are alike..
 		quickSort(items, 0, items.length, req);
