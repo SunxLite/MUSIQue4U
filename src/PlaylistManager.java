@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 /*
  Class Name: PlaylistManger.java
  Author: Sunny Li, Leo Liu
@@ -114,28 +112,45 @@ class PlaylistManager {
 
 	// ============================== SEARCH ==============================
 	static Media[] search(Playlist[] playlists, String[] req) {
+		// The require String array req[] follows the order [sub-class, Media id, title, genre, and secondary fields depending
+		// on subclass]
 		Media[] given = getMedia(playlists);
 		given = sanitize(given, req);
 
-		//The item we are looking for
-		Media find;
-		
-		find = new Music(0, "a", "b", "c", "d");
-		find = new Video(0, "a", "b", 1.1, "d");
-		
-		for (int i = 0; i < given.length; i++) {
-			if (given[i].equals(find)) { // When it matches what the user specified
+		// The three general type
+		int id = Integer.parseInt(req[1]);
+		String title = req[2];
+		String genre = req[3];
 
+		// The item we are looking for and the ones we find
+		Media[] find = new Media[2];
+		Playlist found = new Playlist();
+
+		if (req[0].equalsIgnoreCase("Music")) {
+			find[0] = new Music(id, title, genre, req[4], req[5]);
+		} else if (req[0].equalsIgnoreCase("Video")) {
+			find[0] = new Video(id, title, genre, Double.parseDouble(req[4]), req[5]);
+		} else {
+			find[0] = new Music(id, title, genre, null, null);
+			find[1] = new Video(id, title, genre, null, null);
+		}
+
+		for (int i = 0; i < given.length; i++) {
+			for (int a = 0; a < find.length; a++) {
+				if (given[i].equals(find)) { // When it matches what the user specified TODO: should be find[#], but no error?
+												// REQUIRE CASTING!!!
+					found.addMedia(given[i]);
+				}
 			}
 		}
 
-		Media[] found = null;
-		return found;
+		return found.getList();
 	}
 
 	// ============================== SORT ==============================
 	static Media[] sort(Playlist[] playlists, String[] req) {
 		// Media style sort, Options: Title, Genre, Secondary spec including artist/album or duration/rating
+		// The require String array req[] follows the order [sub-class, field]
 		// Note: When sorting with secondary specs, only those that are an instance of the supported class will be returned
 
 		// get all the Media object that will be sorted

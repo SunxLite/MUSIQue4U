@@ -10,7 +10,7 @@ Purpose: Template for the Media object, which is abstract
  */
 
 abstract class Media {
-	private int id;
+	protected int id;
 	protected String title;
 	protected String genre;
 	protected static int total = 0;

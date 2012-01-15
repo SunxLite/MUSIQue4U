@@ -20,23 +20,28 @@ class Music extends Media {
 
 	boolean equals(Media other) {
 		// Note: Media object may not contain all parameters such as when a Media is created for use with search.
-
-		if (!(title == null || other.title == null)) {
-			if (!this.title.equalsIgnoreCase(other.title)) {
+		// When searching, the other Media object should always be the Media that is being searched for.
+		if (other.id > 0){
+			if (!(this.id == other.id)){
 				return false;
 			}
 		}
-		if (!(genre == null || other.genre == null)) {
+		if (!(other.title == null)) { //if one exists
+			if (!this.title.equalsIgnoreCase(other.title)) { //does not equals
+				return false;
+			}
+		}
+		if (!(other.genre == null)) {
 			if (!this.genre.equalsIgnoreCase(other.genre)) {
 				return false;
 			}
 		}
-		if (!(artist == null || ((Music) other).artist == null)) {
+		if (!(((Music) other).artist == null)) {
 			if (!this.artist.equalsIgnoreCase(((Music) other).artist)) {
 				return false;
 			}
 		}
-		if (!(album == null || ((Music) other).album == null)) {
+		if (!(((Music) other).album == null)) {
 			if (!this.album.equalsIgnoreCase(((Music) other).album)) {
 				return false;
 			}

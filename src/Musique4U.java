@@ -29,7 +29,7 @@ public class Musique4U {
 		list = PlaylistManager.initialize(user);
 
 		// Program info
-		System.out.println("Musique4U ALPHA v0.5");
+		System.out.println("Musique4U ALPHA v0.8");
 
 		// presents program's main menu
 		menu();

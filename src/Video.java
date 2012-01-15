@@ -21,23 +21,28 @@ class Video extends Media {
 
 	boolean equals(Media other) {
 		// Note: Media object may not contain all parameters such as when a Media is created for use with search.
-
-		if (!(title == null || other.title == null)) {
+		// When searching, the other Media object should always be the Media that is being searched for.
+		if (other.id > 0) {
+			if (!(this.id == other.id)) {
+				return false;
+			}
+		}
+		if (!(other.title == null)) {
 			if (!this.title.equalsIgnoreCase(other.title)) {
 				return false;
 			}
 		}
-		if (!(genre == null || other.genre == null)) {
+		if (!(other.genre == null)) {
 			if (!this.genre.equalsIgnoreCase(other.genre)) {
 				return false;
 			}
 		}
-		if (!(duration == null || ((Video) other).duration == null)) {
+		if (!(((Video) other).duration == null)) {
 			if (!(this.duration == (((Video) other).duration))) {
 				return false;
 			}
 		}
-		if (!(rating == null || ((Video) other).rating == null)) {
+		if (!(((Video) other).rating == null)) {
 			if (!this.rating.equalsIgnoreCase(((Video) other).rating)) {
 				return false;
 			}
@@ -57,8 +62,8 @@ class Video extends Media {
 			return 0;
 		}
 	}
-	
-	int compareRating(Video other){ //Just Alphabetically compare it
+
+	int compareRating(Video other) { // Just Alphabetically compare it
 		return this.rating.compareToIgnoreCase(other.rating);
 	}
 
