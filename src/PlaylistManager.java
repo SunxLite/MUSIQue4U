@@ -78,78 +78,135 @@ class PlaylistManager {
 		return items;
 	}
 
-	// =============== *TODO! ===============
-	static Media[] search(Playlist[] list, String[] req) {
-		System.out.println("Currently unavailable");
-		return null;
+
+
+	// ============================== SEARCH ==============================
+	static Media[] search(Playlist[] playlists, String[] req) {
+		Media[] given = getMedia(playlists);
+		Media[] found = null;
+		return found;
 	}
 
-	static Media[] sort(Playlist[] playlists, String[] req) { // Able to pass in an array of playlist object, if it's only one
-																// then pass a single playlist through an array
-		// quicksort method
-		// Get all Media together from playlists
+	// ============================== SORT ==============================
+	static Media[] sort(Playlist[] playlists, String[] req) {
+		// Media style sort, Options: Title, Genre, Secondary spec including artist/album or duration/rating
+		// Note: When sorting with secondary specs, only those that are an instance of the supported class will be returned
 
-		// Check whether the user want to sort the playlist or its media by checking the first requirement in req[0]
-		// Playlist style sort, Options: Name, Size
-		if (req[0].equalsIgnoreCase("Playlist")) {
-			// Playlist[] playlists; //this is passed in from parameter so it exist already
+		// get all the Media object that will be sorted
+		Media[] items = getMedia(playlists);
 
-			// Check second parameter and sort to see how the playlist should be sorted by
-			if (req[1].equalsIgnoreCase("Name")) {
+		// Get Sort Parameters
+		String subClass = req[0]; // this allows additional class to be added with the same type name
+		// String type = req[1]; //Not used in this method..
 
-			} else if (req[1].equalsIgnoreCase("Size")) {
+		// Filter: Check whether the client wants to sort with secondary spec so to cast it down, null when its primary spec
+		// It uses a array instead of a single String because it allows additional class to be added with the same parameter
+		if (subClass.equalsIgnoreCase("Music") || subClass.equalsIgnoreCase("Video")) {
 
-			}
+			// for casting down into its respected objects, and put it into playlist since it has pre-written methods
+			// Playlist secondary = null; TODO: Check this..
+			Playlist secondary = new Playlist();
 
-			// Meida style sort, Options: Title, Genre, Secondary spec including artist/album or duration/rating
-		} else if (req[0].equalsIgnoreCase("Media")) {
-			
-			// get all the Media object that will be sorted
-			Media[] items = getMedia(playlists);
-
-			// Check whether the client want to sort with secondary spec so to cast it down, null when its primary
-			if (req[1].equalsIgnoreCase("Music") || req[2].equalsIgnoreCase("Video")) {
-				
-				// for casting down into its respected objects, and put it into playlist since it has pre-written methods
-				// Playlist secondary = null;
-				Playlist secondary = new Playlist();
-				
-				if (req[1].equalsIgnoreCase("Music")) {
-					
-					for (int i = 0; i < items.length; i++) {
-						if (items[i] instanceof Music) {
-							secondary.addMedia((Music) items[i]);
-						}
+			if (subClass.equalsIgnoreCase("Music")) {
+				for (int i = 0; i < items.length; i++) {
+					if (items[i] instanceof Music) { // Use of Abstraction
+						secondary.addMedia((Music) items[i]); // TODO: See if casting works..
 					}
-					
-				} else if (req[1].equalsIgnoreCase("Video")) {
-					
-					for (int i = 0; i < items.length; i++) {
-						if (items[i] instanceof Video) {
-							secondary.addMedia((Video) items[i]);
-						}
-					}
-					
 				}
-				
-				// Retrieve the secondary objects
-				Playlist[] sec = { secondary };
-				items = getMedia(sec);
+			} else if (subClass.equalsIgnoreCase("Video")) {
+				for (int i = 0; i < items.length; i++) {
+					if (items[i] instanceof Video) {
+						secondary.addMedia((Video) items[i]);
+					}
+				}
 			}
 
-			// Now all media sort alike..
+			// Retrieve the secondary objects, there should be a shorter way but I forgot it..
+			Playlist[] sec = { secondary };
+			items = getMedia(sec);
 
 		}
-		return null;
+
+		// Now all media sort are alike..
+		quickSort(items, 0, items.length, req);
+		return items;
 	}
 
-	// Swap methods for quick sort, this only works with quick sort since list[b] is stored into the pivot variable
-	private void swap(Playlist[] list, int a, int b) {
-		list[b] = list[a];
-		list[a] = list[b - 1];
+	private static void quickSort(Media[] data, int left, int right, String[] style) { // Makes use of recursion
+		// An array of styles allow variety
+		if (left < left) {
+			int x = left;
+			int y = right;
+			Media pivot = data[right];
+
+			// Check sort style, since there is no eval functions in Java... TODO: Check which way it sorts..
+			// An alternative to this is to make another array and put the required data for sorting into it..
+			if (style[0] == null && style[1].equalsIgnoreCase("Title")) {
+				while (x != y) {
+					if (data[x].compareTitle(pivot) < 0) {
+						x++;
+					} else {
+						swap(data, x, y);
+						y--;
+					}
+				}
+			} else if (style[0] == null && style[1].equalsIgnoreCase("Genre")) {
+				while (x != y) {
+					if (data[x].compareGenre(pivot) < 0) {
+						x++;
+					} else {
+						swap(data, x, y);
+						y--;
+					}
+				}
+			} else if (style[0].equalsIgnoreCase("Music") && style[1].equalsIgnoreCase("Artist")) {
+				// When passing in these secondary values, we are certain that it is an instance of the supported classes
+				while (x != y) {
+					if (((Music) data[x]).compareArtist((Music) pivot) < 0) {
+						x++;
+					} else {
+						swap(data, x, y);
+						y--;
+					}
+				}
+			} else if (style[0].equalsIgnoreCase("Music") && style[1].equalsIgnoreCase("Album")) {
+				while (x != y) {
+					if (((Music) data[x]).compareAlbum((Music) pivot) < 0) {
+						x++;
+					} else {
+						swap(data, x, y);
+						y--;
+					}
+				}
+			} else if (style[0].equalsIgnoreCase("Video") && style[1].equalsIgnoreCase("Duration")) {
+				while (x != y) {
+					if (((Video) data[x]).compareDuration((Video) pivot) < 0) { // TODO: Check if the order is right for this
+						x++;
+					} else {
+						swap(data, x, y);
+						y--;
+					}
+				}
+			} else if (style[0].equalsIgnoreCase("Video") && style[1].equalsIgnoreCase("Rating")) {
+				while (x != y) {
+					if (((Video) data[x]).compareRating((Video) pivot) < 0) {
+						x++;
+					} else {
+						swap(data, x, y);
+						y--;
+					}
+				}
+			}
+			data[x] = pivot; // restore the pivot into its correct position
+
+			// Recursive
+			quickSort(data, left, x - 1, style);
+			quickSort(data, y + 1, right, style);
+		}
 	}
 
-	private void swap(Media[] item, int a, int b) {
+	// Swap methods for quick sort, this only works with quick sort since item[b] is stored into the pivot variable
+	private static void swap(Media[] item, int a, int b) {
 		item[b] = item[a];
 		item[a] = item[b - 1];
 	}
