@@ -3,7 +3,7 @@ Class Name: FileManager.java
 Author: Leo Liu, Sunny Li
 Date: Jan 10, 2011
 School: A.Y. Jackson SS
-Computer used: TDSB
+Computer used: TDSB, Sunny's Computer, Leo's Computer
 IDE used: JGrasp, Eclipse
 Purpose: The FileManager class provides a library of methods to handle file data.
 			-Library contains: userExist, checkPass, loadUser...
@@ -37,9 +37,11 @@ public class FileManager {
 
 	// Testing utility - Skip this method
 	public static void main(String[] args) {
+
 		/*
 		 * if (checkPass("leo123", "PASSWORD")) { System.out.println("User Exist"); } User test = loadUser("admin"); // Note:
 		 * Username only! System.out.println("User: " + test);
+		 * 
 		 * 
 		 * if (addUser(new User(1, "a", "a", "a", 2))) { System.out.println("User added"); } Playlist[] test1 =
 		 * loadPlaylist(test); System.out.println(test1[0]);
@@ -49,6 +51,7 @@ public class FileManager {
 		for (int i = 0; i < testing.length; i++) {
 			for (int x = 0; x < (testing[i].getList()).length; x++) {
 				System.out.println(testing[i].getList()[x]);
+
 			}
 		}
 	}
@@ -60,12 +63,16 @@ public class FileManager {
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			doc = docBuilder.parse(usrFile);
+
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
+
 		} catch (IOException e) {
 			e.printStackTrace();
+
 		} catch (SAXException e) {
 			e.printStackTrace();
+
 		}
 
 		// doc.getDocumentElement().normalize(); // restore escaped text back to original
@@ -79,10 +86,12 @@ public class FileManager {
 				Element eElement = (Element) currentNode;
 				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {
 					exist = true;
+
 				}
 			}
 		}
 		return exist;
+
 	}
 
 	// Check if the log-in information provided is valid
@@ -92,12 +101,16 @@ public class FileManager {
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			doc = docBuilder.parse(usrFile);
+
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
+
 		} catch (IOException e) {
 			e.printStackTrace();
+
 		} catch (SAXException e) {
 			e.printStackTrace();
+
 		}
 
 		doc.getDocumentElement().normalize();
@@ -110,6 +123,7 @@ public class FileManager {
 				Element eElement = (Element) currentNode;
 				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {
 					if (getTagValue("pass", eElement).equals(password)) {
+
 						valid = true;
 					}
 				}
@@ -117,18 +131,24 @@ public class FileManager {
 		}
 
 		return valid;
+
 	}
 
 	static User loadUser(String username) {
+
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			doc = docBuilder.parse(usrFile);
+
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
+
 		} catch (IOException e) {
 			e.printStackTrace();
+
 		} catch (SAXException e) {
 			e.printStackTrace();
+
 		}
 
 		// doc.getDocumentElement().normalize();
@@ -143,6 +163,7 @@ public class FileManager {
 				eElement = (Element) currentNode;
 				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {
 					found = true;
+
 				}
 			}
 		}
@@ -152,22 +173,28 @@ public class FileManager {
 						.trim()));
 
 		return chosen;
+
 	}
 
 	static boolean addUser(User newUser) {
 		if (userExist(newUser.getUsername())) {
 			return false;
+
 		} else {
 
 			try {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
 				doc = docBuilder.parse(usrFile);
+
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
+
 			} catch (IOException e) {
 				e.printStackTrace();
+
 			} catch (SAXException e) {
 				e.printStackTrace();
+
 			}
 
 			doc.getDocumentElement().normalize();
@@ -210,13 +237,17 @@ public class FileManager {
 
 			} catch (TransformerConfigurationException e) {
 				e.printStackTrace();
+
 			} catch (TransformerFactoryConfigurationError e) {
 				e.printStackTrace();
+
 			} catch (TransformerException e) {
 				e.printStackTrace();
+
 			}
 
 			return true; // TODO this is not safe...
+
 		}
 	}
 
@@ -228,6 +259,7 @@ public class FileManager {
 		Playlist currentPlaylist = null;
 
 		while (!end) {
+
 			try {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
 				File listLoc = new File("../data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
@@ -251,6 +283,7 @@ public class FileManager {
 							String artist = getTagValue("artist", eElement);
 							String album = getTagValue("album", eElement);
 							newMedia = new Music(id, title, genre, artist, album);
+
 						} else {
 							int id = Integer.parseInt(getTagValue("id", eElement).trim());
 							String title = getTagValue("title", eElement);
@@ -258,27 +291,36 @@ public class FileManager {
 							double duration = Double.parseDouble(getTagValue("duration", eElement).trim());
 							String rating = getTagValue("rating", eElement);
 							newMedia = new Video(id, title, genre, duration, rating);
+
 						}
 						selection[temp] = newMedia;
+
 					}
 					Element playlistName = (Element) doc.getDocumentElement();
 					currentPlaylist = new Playlist(playlistName.getAttribute("name"), selection);
+
 				}
 				tracking.add(currentPlaylist);
 				playlistChecker++;
+
 			} catch (FileNotFoundException e) {
 				end = true; // TEMPORARY... better get a variable that tells how much playlist there is
+
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
+
 			} catch (IOException e) {
 				e.printStackTrace();
+
 			} catch (SAXException e) {
 				e.printStackTrace();
+
 			}
 		}
 
 		Playlist[] chosen = tracking.toArray(new Playlist[tracking.size()]);
 		return chosen;
+
 	}
 
 	static void add(Media[] adding, Playlist selected, User user) {
@@ -287,6 +329,7 @@ public class FileManager {
 		for (int i = 0; i < matchingPlaylists.length && !found; i++) {
 			if (matchingPlaylists[i].equals(selected)) {
 				found = true;
+
 				try {
 					docBuilder = docBuilderFactory.newDocumentBuilder();
 					File listLoc = new File("../data/user/" + user.getID() + "/" + i + ".xml");
@@ -319,6 +362,7 @@ public class FileManager {
 							Element album = doc.createElement("album");
 							album.appendChild(doc.createTextNode(((Music) adding[x]).getAlbum() + ""));
 							media.appendChild(album);
+
 						} else {
 							Element media = doc.createElement("Media");
 							media.setAttribute("type", "Video");
@@ -353,7 +397,61 @@ public class FileManager {
 						// make the output look neat, or make it super hard to see by not setting indent
 						transformer.setOutputProperty("indent", "yes");
 						transformer.transform(source, output);
+
 					}
+				} catch (ParserConfigurationException e) {
+					e.printStackTrace();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+
+				} catch (SAXException e) {
+					e.printStackTrace();
+
+				} catch (TransformerConfigurationException e) {
+					e.printStackTrace();
+
+				} catch (TransformerFactoryConfigurationError e) {
+					e.printStackTrace();
+
+				} catch (TransformerException e) {
+					e.printStackTrace();
+
+				}
+			}
+		}
+	}
+
+	static void del(Media[] deling, Playlist selected, User user) {
+		Playlist[] matchingPlaylists = loadPlaylist(user);
+		boolean found = false;
+		for (int i = 0; i < matchingPlaylists.length && !found; i++) {
+			if (matchingPlaylists[i].equals(selected)) {
+				found = true;
+				try {
+					docBuilder = docBuilderFactory.newDocumentBuilder();
+					File listLoc = new File("../data/user/" + user.getID() + "/" + i + ".xml");
+					doc = docBuilder.parse(listLoc);
+
+					Node rootNode = doc.getFirstChild();
+					NodeList mediaList = doc.getElementsByTagName("Media");
+					for (int x = 0; x < deling.length; x++) {
+						for (int y = 0; y < mediaList.getLength(); y++) {
+							Element currentElement = (Element) mediaList.item(y);
+							if (getTagValue("id", currentElement).equals(deling[x].getID() + "")) {
+								rootNode.removeChild(mediaList.item(y));
+							}
+						}
+					}
+					Transformer transformer = TransformerFactory.newInstance().newTransformer();
+
+					DOMSource source = new DOMSource(doc);
+					StreamResult output = new StreamResult(listLoc);
+
+					// make the output look neat, or make it super hard to see by not setting indent
+					transformer.setOutputProperty("indent", "yes");
+					transformer.transform(source, output);
+
 				} catch (ParserConfigurationException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -371,8 +469,9 @@ public class FileManager {
 		}
 	}
 
-	static void del(Media[] adding, Playlist selected, User user) {
-
+	public static void edit(Media[] original, Media[] edited, Playlist selected, User user) {
+		del(original, selected, user);
+		add(edited, selected, user);
 	}
 
 	// A custom class to quickly get tag values
@@ -380,27 +479,34 @@ public class FileManager {
 		NodeList nlList = eElement.getElementsByTagName(sTag).item(0).getChildNodes();
 		Node nValue = (Node) nlList.item(0);
 		return nValue.getNodeValue();
+
 	}
 
 	// A custom class to quickly get the last user ID number
 	private static int getLastID() {
 		String returningID = "";
+
 		try {
 			Document docu = docBuilder.parse(usrFile);
 			NodeList nList = docu.getElementsByTagName("user");
 			Node lastNode = (Node) nList.item((nList.getLength() - 1));
 			Element lastElement = (Element) lastNode;
 			returningID = getTagValue("id", lastElement);
+
 		} catch (IOException e) {
 			e.printStackTrace();
+
 		} catch (SAXException e) {
 			e.printStackTrace();
+
 		}
 		return Integer.parseInt(returningID.trim());
+
 	}
 
 	// A custom class to quickly get the last Media Id number
 	private static int getLastMediaID(Media reference) {
 		return reference.getTotal() + 1;
+
 	}
 }

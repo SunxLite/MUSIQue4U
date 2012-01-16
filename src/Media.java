@@ -41,6 +41,10 @@ abstract class Media {
 	int getTotal() {
 		return total;
 	}
+	
+	int getID(){
+		return id; //TODO: check it!
+	}
 
 	String getTitle() {
 		return title;
