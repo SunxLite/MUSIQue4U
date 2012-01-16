@@ -19,9 +19,9 @@ class Playlist {
 
 	// Initializer
 	public Playlist() {
-		//for temporary Media arrays
+		// for temporary Media arrays
 	}
-	
+
 	public Playlist(String name, Media[] media) {
 		this.name = name;
 		this.media = media;
@@ -29,7 +29,7 @@ class Playlist {
 
 	// Methods
 	void addMedia(Media item) {
-		//TODO: Check if the object is null
+		// TODO: Check if the object is null
 		// This method will append a data to the list by creating a new list and overwriting it
 		Media[] temp = new Media[media.length + 1];
 
@@ -43,7 +43,7 @@ class Playlist {
 		media = temp;
 	}
 
-	void removeMedia(Media item) {
+	void removeMedia(Media item, User user) { //...
 		// the Media item here is a temporary object that contains the same parameter of items that needs to be removed.
 		// can be used to mass remove Media with the same title, album, artist, etc..
 
@@ -51,6 +51,9 @@ class Playlist {
 		int removed = 0;
 		for (int i = 0; i < media.length; i++) {
 			if (media[i].equals(item)) {
+				Media[] deled = new Media[1]; // TODO: look at this added code..
+				deled[0] = media[i];
+				FileManager.del(deled, this, user); // ...
 				media[i] = null;
 				removed++;
 			}
@@ -84,13 +87,13 @@ class Playlist {
 	Media[] getList() {
 		return media; // The Media's within the playlist
 	}
-	
-	String getName(){
+
+	String getName() {
 		return name;
 	}
 
 	// Object Name
-	public String toString() { //same as getName but doesn't work when comparing
+	public String toString() { // same as getName but doesn't work when comparing
 		return name; // Playlist name
 	}
 

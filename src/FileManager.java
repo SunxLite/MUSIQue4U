@@ -234,6 +234,60 @@ public class FileManager {
 		}
 	}
 
+	static Playlist[] addPlaylist(User selected, String playlistName) {
+		int playlistChecker = 0;
+		boolean end = false;
+		File listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
+		;
+		while (!end) {
+			try {
+				docBuilder = docBuilderFactory.newDocumentBuilder();
+				doc = docBuilder.newDocument();
+				File userLoc = new File(root + "data/user/" + selected.getID());
+				boolean exists = userLoc.mkdir();
+
+				listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
+				Document checkTest = docBuilder.parse(listLoc);
+				NodeList testExistence = checkTest.getElementsByTagName("Playlist");
+				playlistChecker++;
+			} catch (FileNotFoundException e) {
+				end = true; // if the file does not exist anymore, it stops the while loop
+				Element playList = doc.createElement("Playlist"); // adds information into the xml data file
+				playList.setAttribute("name", playlistName);
+				doc.appendChild(playList);
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+
+			} catch (SAXException e) {
+				e.printStackTrace();
+
+			}
+
+		}
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+
+			DOMSource source = new DOMSource(doc);
+			StreamResult out = new StreamResult(listLoc);
+			// make the output look neat, or make it super hard to see by not setting indent
+			transformer.setOutputProperty("indent", "yes");
+			transformer.transform(source, out);
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+
+		} catch (TransformerFactoryConfigurationError e) {
+			e.printStackTrace();
+
+		} catch (TransformerException e) {
+			e.printStackTrace();
+
+		}
+		return loadPlaylist(selected);
+	}
+
 	// Get the playlist and pass it back
 	static Playlist[] loadPlaylist(User selected) {
 		// Temporary use List to hold append the data
@@ -283,10 +337,10 @@ public class FileManager {
 						selection[temp] = newMedia;
 
 					}
-					Element playlistName = (Element) doc.getDocumentElement();
-					currentPlaylist = new Playlist(playlistName.getAttribute("name"), selection);
 
 				}
+				Element playlistName = (Element) doc.getDocumentElement();
+				currentPlaylist = new Playlist(playlistName.getAttribute("name"), selection);
 				tracking.add(currentPlaylist);
 				playlistChecker++;
 

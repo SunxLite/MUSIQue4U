@@ -87,7 +87,7 @@ public class Musique4U {
 						System.out.println("Creating new playlist");
 						System.out.println("Name of new playlist: ");
 						String newName = in.nextLine().trim();
-						// Create a blank playlist, check if the same name exist.
+						// Create a blank playlist, check if the playlist name is alredy taken.
 						boolean available = true;
 						for (int i = 0; i < playlists.length; i++) {
 							if (newName.equalsIgnoreCase(playlists[i].getName())) {
@@ -108,6 +108,7 @@ public class Musique4U {
 								}
 								// append the new playlist to playlist array.
 								arr2[playlists.length] = newList;
+								playlists = arr2; //TODO: naming..!
 								System.out.println("Playlist added to your collection");
 							} else {
 								System.out.println("You have cancelled the operation");
@@ -155,21 +156,25 @@ public class Musique4U {
 									System.out.print("Album: ");
 									info[3] = in.next();
 
-									System.out.print("Adding to playlist");
-									selected.addMedia(new Music(Media.total + 1, info[0], info[1], info[2], info[3]));
+									Media[] newMusic = new Media[1];
+									newMusic[0] = new Music(Media.total + 1, info[0], info[1], info[2], info[3]);
+									selected.addMedia(newMusic[0]); //add locally
+									FileManager.add(newMusic, selected, user); //add newMusic into selected playlist which belongs to user...
+									System.out.println("added to playlist!");
 								} else if (choice == 2) {
-									System.out.print("Duration(# of seconds): ");
-									info[2] = in.next(); // Catch this error..
+									System.out.print("Duration(# of minutes): ");
+									info[2] = in.next(); // Check if its double below..
 									System.out.print("Rating: ");
 									info[3] = in.next();
 
-									System.out.print("Adding to playlist");
-									// used protected data..
 									try {
-										selected.addMedia(new Video(Media.total + 1, info[0], info[1], Double
-												.parseDouble(info[2]), info[3]));
+									Media[] newVideo = new Media[1];
+									newVideo[0] = new Video(Media.total + 1, info[0], info[1], Double.parseDouble(info[2]), info[3]);
+									selected.addMedia(newVideo[0]);
+									FileManager.add(newVideo, selected, user);
+									System.out.println("Added to playlist");
 									} catch (NumberFormatException e) {
-										System.out.println("The information that you have provided is invalid. Quitting.");
+										System.out.println("The information you have provide is invalid.");
 									}
 								}
 
@@ -193,20 +198,19 @@ public class Musique4U {
 									System.out.print("Album: ");
 									info[3] = in.next();
 
-									System.out.print("Adding to playlist");
-									selected.removeMedia(new Music(-1, info[0], info[1], info[2], info[3])); // ID doesn't
-																												// matter
+									selected.removeMedia(new Music(-1, info[0], info[1], info[2], info[3]), user);
+									System.out.println("Media removed from playlist");
 								} else if (choice == 2) {
-									System.out.print("Duration(# of seconds): ");
-									info[2] = in.next(); // Catch this error..
+									System.out.print("Duration(# of minutes): ");
+									info[2] = in.next();
 									System.out.print("Rating: ");
 									info[3] = in.next();
 
-									System.out.print("Adding to playlist");
-									// used protected data..
+									System.out.print("Deleting from playlist");
 									try {
 										selected.removeMedia(new Video(-1, info[0], info[1], Double.parseDouble(info[2]),
-												info[3]));
+												info[3]), user);
+												System.out.println("Media removed from playlist");
 									} catch (NumberFormatException e) {
 										System.out.println("The information that you have provided is invalid.\nQuitting.");
 									}
@@ -334,5 +338,4 @@ public class Musique4U {
 
 		}
 	}
-
 }
