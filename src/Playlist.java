@@ -6,9 +6,8 @@ School: A.Y. Jackson SS
 Computer used: Sunny's Computer, TDSB
 IDE used: Eclipse, JGrasp
 Purpose: The playlist object.
-			-Each playlist requires an unique name
-			-The playlist contains strands of media objects which can be added, remove or modify.
-			-TODO: Try make it return boolean so it confirms success
+		-Each playlist requires an unique name
+		-The playlist contains strands of media objects which can be added, remove or modify.
  */
 
 class Playlist {

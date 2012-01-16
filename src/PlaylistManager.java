@@ -82,11 +82,11 @@ class PlaylistManager {
 
 		// Filter: Check whether the client wants to sort with secondary spec so to cast it down, null when its primary spec
 		// It uses a array instead of a single String because it allows additional class to be added with the same parameter
+		if (subClass != null)
 		if (subClass.equalsIgnoreCase("Music") || subClass.equalsIgnoreCase("Video")) {
 
 			// for casting down into its respected objects, and put it into playlist since it has pre-written methods
-			// Playlist secondary = null; TODO: Check this..
-			Playlist valid = new Playlist();
+			Playlist valid = new Playlist(); //enpty constructor instead of null value
 
 			if (subClass.equalsIgnoreCase("Music")) {
 				for (int i = 0; i < items.length; i++) {
@@ -125,6 +125,7 @@ class PlaylistManager {
 		Media[] find = new Media[2];
 		Playlist found = new Playlist();
 
+		//creat media object to search with
 		if (req[0].equalsIgnoreCase("Music")) {
 			find[0] = new Music(id, title, genre, req[4], req[5]);
 		} else if (req[0].equalsIgnoreCase("Video")) {
@@ -136,14 +137,13 @@ class PlaylistManager {
 
 		for (int i = 0; i < given.length; i++) {
 			for (int a = 0; a < find.length; a++) {
-				if (given[i].equals(find)) { // When it matches what the user specified TODO: should be find[#], but no error?
-												// REQUIRE CASTING!!!??
+				if (given[i].equals(find[a])) { // When it matches what the user specified
 					found.addMedia(given[i]);
 				}
 			}
 		}
 
-		return found.getList();
+		return found.getList(); //return an array of media that matches search parameters
 	}
 
 	// ============================== SORT ==============================

@@ -161,7 +161,7 @@ public class FileManager {
 		if (userExist(newUser.getUsername())) { // checks if the user already exists, prevents duplication
 			return false;
 		} else {
-			
+
 			try {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
 				doc = docBuilder.parse(usrFile);
@@ -226,9 +226,9 @@ public class FileManager {
 
 			}
 
-			//Additionally create a default user media storage.
-			newPlaylistXML(new String((getLastID()+1)+"/"+0), "default");
-			
+			// Additionally create a default user media storage.
+			newPlaylistXML(new String((getLastID() + 1) + "/" + 0), "default");
+
 			return true; // TODO this is not safe...
 
 		}
@@ -275,7 +275,7 @@ public class FileManager {
 							int id = Integer.parseInt(getTagValue("id", eElement).trim()); // for a Video type
 							String title = getTagValue("title", eElement);
 							String genre = getTagValue("genre", eElement);
-							double duration = Double.parseDouble(getTagValue("duration", eElement).trim());
+							double duration = Double.parseDouble(getTagValue("duration", eElement));
 							String rating = getTagValue("rating", eElement);
 							newMedia = new Video(id, title, genre, duration, rating);
 
@@ -293,6 +293,9 @@ public class FileManager {
 			} catch (FileNotFoundException e) {
 				end = true; // if the file does not exist anymore, it stops the while loop
 
+			} catch (NullPointerException e) {
+				System.out.println("Null Pointer");
+
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
 
@@ -305,7 +308,7 @@ public class FileManager {
 			}
 		}
 
-		Playlist[] chosen = tracking.toArray(new Playlist[tracking.size()]);
+		Playlist[] chosen = tracking.toArray(new Playlist[tracking.size()]); // Convert list back to array
 		return chosen;
 
 	}
@@ -506,9 +509,9 @@ public class FileManager {
 		return reference.getTotal() + 1;
 
 	}
-	
-	//A quick method to create a single playlist...
-	private static void newPlaylistXML(String fileName, String name){
+
+	// A quick method to create a single playlist...
+	private static void newPlaylistXML(String fileName, String name) {
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			// Initializing a DOM structured document in memory
@@ -528,13 +531,13 @@ public class FileManager {
 			// Input source
 			DOMSource src = new DOMSource(doc);
 			// The output stream
-			StreamResult out = new StreamResult(new File(root+"data/user/"+fileName+".xml"));
+			StreamResult out = new StreamResult(new File(root + "data/user/" + fileName + ".xml"));
 			// StreamResult out = new StreamResult(System.out);
 
 			// Takes in the source and convert it to a format that works with the stream,
 			// and the stream can write the data into a file or print it on screen.
 			tf.transform(src, out);
-			
+
 		} catch (ParserConfigurationException e) {
 			System.out.println("Misconfigured Parser!");
 			// The machine may not have the required java classes but this is unlikely as
