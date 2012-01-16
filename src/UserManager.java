@@ -6,11 +6,11 @@ School: A.Y. Jackson SS
 Computer used: Sunny's Computer
 IDE used: Eclipse
 Purpose: A library class that manages the user object
-			It contains methods that specifically:
-			- presents options for the user to log-in
-			- does just the logging-in part
-			- does just the register part
-			- TODO: A sign-out option
+		It contains methods that specifically:
+		- presents options for the user to log-in
+		- method for logging-in part
+		- method for the register part
+		- TODO: A sign-out option
  */
 
 import java.util.Scanner;

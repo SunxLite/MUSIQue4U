@@ -6,8 +6,9 @@ School: A.Y. Jackson SS
 Computer used: Sunny's Computer
 IDE used: Eclipse
 Purpose: This is the main program.
-		-It initializes the program by first prompting the user to log-in or register,
-		-then it presents a menu for the user to do stuff with their playlists such as (add/del/mod music/video)
+		-It initializes the program by first prompting the user to log-in or register, and
+		-then it presents a menu for the user to do stuff with their playlists such as add, delete, or modify their media objects
+		-TODO: Enhancement cmd type prompt?
  */
 
 import java.util.Scanner;
