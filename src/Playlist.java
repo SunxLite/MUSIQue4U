@@ -85,9 +85,13 @@ class Playlist {
 	Media[] getList() {
 		return media; // The Media's within the playlist
 	}
+	
+	String getName(){
+		return name;
+	}
 
 	// Object Name
-	public String toString() {
+	public String toString() { //same as getName but doesn't work when comparing
 		return name; // Playlist name
 	}
 

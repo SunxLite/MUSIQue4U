@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
-<Playlist>
-	<Music>
+<Playlist name = "fav">
+	<Media type = "Music">
 		<id>1</id>
 		<title>Teenagers</title>
 		<genre>Rock</genre>
 		<artist>My Chemical Romance</artist>
 		<album>Teeangers</album>
-	</Music>
-	<Video>
+	</Media>
+	<Media type = "Video">
 		<id>2</id>
 		<title>Avatar</title>
 		<genre>Sci-Fi</genre>
 		<duration>2:10:00</duration>
 		<rating>E</rating>
-	</Video>
+	</Media>
 </Playlist>

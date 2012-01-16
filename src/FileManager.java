@@ -31,30 +31,9 @@ public class FileManager {
 	private static DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 	private static DocumentBuilder docBuilder = null; // Has to initialize inside method to catch ParserConfigurationException
 	// Source File
-	private static File usrFile = new File("data/User.xml"); // Eclipse
-	// private static File usrFile = new File("../data/User.xml"); // JGrasp
+	private static String root = ""; // empty string for Eclipse IDE, "../" for JGrasp
+	private static File usrFile = new File(root + "data/User.xml");
 	private static Document doc = null; // catch IOException in method
-
-	// Testing utility - Skip this method
-	public static void main(String[] args) {
-
-		/*
-		 * if (checkPass("leo123", "PASSWORD")) { System.out.println("User Exist"); } User test = loadUser("admin"); // Note:
-		 * Username only! System.out.println("User: " + test);
-		 * 
-		 * 
-		 * if (addUser(new User(1, "a", "a", "a", 2))) { System.out.println("User added"); } Playlist[] test1 =
-		 * loadPlaylist(test); System.out.println(test1[0]);
-		 */
-		User test = loadUser("admin");
-		Playlist[] testing = loadPlaylist(test);
-		for (int i = 0; i < testing.length; i++) {
-			for (int x = 0; x < (testing[i].getList()).length; x++) {
-				System.out.println(testing[i].getList()[x]);
-
-			}
-		}
-	}
 
 	// Check if the user data file contains a specified user
 	static boolean userExist(String username) {
@@ -130,9 +109,9 @@ public class FileManager {
 		}
 
 		return valid;
-
 	}
 
+	// load the specified user's detail and return it
 	static User loadUser(String username) {
 
 		try {
@@ -177,12 +156,12 @@ public class FileManager {
 
 	}
 
+	// Write a new user into the user data file by appending to it
 	static boolean addUser(User newUser) {
 		if (userExist(newUser.getUsername())) { // checks if the user already exists, prevents duplication
 			return false;
-
 		} else {
-
+			
 			try {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
 				doc = docBuilder.parse(usrFile);
@@ -247,11 +226,15 @@ public class FileManager {
 
 			}
 
+			//Additionally create a default user media storage.
+			newPlaylistXML(new String((getLastID()+1)+"/"+0), "default");
+			
 			return true; // TODO this is not safe...
 
 		}
 	}
 
+	// Get the playlist and pass it back
 	static Playlist[] loadPlaylist(User selected) {
 		// Temporary use List to hold append the data
 		ArrayList<Playlist> tracking = new ArrayList<Playlist>();
@@ -264,7 +247,7 @@ public class FileManager {
 
 			try {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
-				File listLoc = new File("../data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
+				File listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
 				doc = docBuilder.parse(listLoc);
 
 				doc.getDocumentElement().normalize();
@@ -327,16 +310,17 @@ public class FileManager {
 
 	}
 
+	// add a media data to playlist
 	static void add(Media[] adding, Playlist selected, User user) {
 		Playlist[] matchingPlaylists = loadPlaylist(user);
 		boolean found = false;
 		for (int i = 0; i < matchingPlaylists.length && !found; i++) {
 			if (matchingPlaylists[i].equals(selected)) {
-				found = true;
+				found = true; // quit for loop
 
 				try {
 					docBuilder = docBuilderFactory.newDocumentBuilder();
-					File listLoc = new File("../data/user/" + user.getID() + "/" + i + ".xml");
+					File listLoc = new File(root + "data/user/" + user.getID() + "/" + i + ".xml");
 					doc = docBuilder.parse(listLoc);
 
 					Node currentNode = doc.getFirstChild(); // get root node
@@ -436,8 +420,9 @@ public class FileManager {
 				found = true;
 				try {
 					docBuilder = docBuilderFactory.newDocumentBuilder();
-					File listLoc = new File("../data/user/" + user.getID() + "/" + i + ".xml"); // access the corresponding user
-																								// data file
+					File listLoc = new File(root + "data/user/" + user.getID() + "/" + i + ".xml"); // access the corresponding
+																									// user
+																									// data file
 					doc = docBuilder.parse(listLoc);
 
 					Node rootNode = doc.getFirstChild();
@@ -500,16 +485,17 @@ public class FileManager {
 		try {
 			Document docu = docBuilder.parse(usrFile);
 			NodeList nList = docu.getElementsByTagName("user");
+			// This assumes that the last user in the data file should have the last id... which it should
 			Node lastNode = (Node) nList.item((nList.getLength() - 1));
 			Element lastElement = (Element) lastNode;
 			returningID = getTagValue("id", lastElement);
 
 		} catch (IOException e) {
 			e.printStackTrace();
-
 		} catch (SAXException e) {
 			e.printStackTrace();
-
+		} catch (ArrayIndexOutOfBoundsException e) { // when there is no user in database..
+			return 0;
 		}
 		return Integer.parseInt(returningID.trim());
 
@@ -519,5 +505,43 @@ public class FileManager {
 	private static int getLastMediaID(Media reference) {
 		return reference.getTotal() + 1;
 
+	}
+	
+	//A quick method to create a single playlist...
+	private static void newPlaylistXML(String fileName, String name){
+		try {
+			docBuilder = docBuilderFactory.newDocumentBuilder();
+			// Initializing a DOM structured document in memory
+			Document doc = docBuilder.newDocument();
+
+			// Creating a root element for the XML file
+			Element rootElement = doc.createElement("Playlist");
+			// Give it an attribute
+			rootElement.setAttribute("name", name);
+			// Adding the root element to the document
+			doc.appendChild(rootElement);
+
+			// Output content to XML file
+			// Transformer takes the in memory document and output its data onto a stream
+			TransformerFactory tff = TransformerFactory.newInstance();
+			Transformer tf = tff.newTransformer();
+			// Input source
+			DOMSource src = new DOMSource(doc);
+			// The output stream
+			StreamResult out = new StreamResult(new File(root+"data/user/"+fileName+".xml"));
+			// StreamResult out = new StreamResult(System.out);
+
+			// Takes in the source and convert it to a format that works with the stream,
+			// and the stream can write the data into a file or print it on screen.
+			tf.transform(src, out);
+			
+		} catch (ParserConfigurationException e) {
+			System.out.println("Misconfigured Parser!");
+			// The machine may not have the required java classes but this is unlikely as
+			// Java comes bundled with some XML handling classes by default.
+			// So it is likely that the computer is misconfigured.
+		} catch (TransformerException e) {
+			System.out.println("Unable to print data");
+		}
 	}
 }

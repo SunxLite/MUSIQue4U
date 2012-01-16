@@ -79,17 +79,131 @@ public class Musique4U {
 				choice = Integer.parseInt(temp);
 
 				if (choice == 1) {
+					Playlist selected;
 					System.out.println("You have choose to manage your playlist");
-					boolean stop = false;
-					while (!stop){
-					System.out.println("");
+
+					System.out.println("1. Create New Playlist\n2. Edit Existing Playlist");
+					choice = Integer.parseInt(in.next());
+
+					if (choice == 1) {
+						System.out.println("Creating new playlist...");
+						System.out.println("Name of new playlist: ");
+						String newName = in.nextLine().trim();
+
+					} else if (choice == 2) {
+						System.out.println("Please select your playlist:");
+						PlaylistManager.display(playlists);
+
+						System.out.print("\nSelect the playlist where you want to add or delete media (Name): ");
+						String name = in.next();
+
+						for (int i = 0; i < playlists.length; i++) {
+							if (name.equalsIgnoreCase(playlists[i].getName())) {
+								selected = playlists[i];
+							}
+						}
 					}
+
+					
 				} else if (choice == 2) {
-					System.out.println("Search");
+					System.out.println("Search all Media");
+					System.out.println("Please enter the fields you want to search for (\".\" to ignore the field)");
+
+					// Search prompt
+					// General data
+					System.out.print("ID: ");
+					String id = in.next(); //take in as String but parse later.
+					if (id.equalsIgnoreCase(".")) {
+						id = null;
+					}
+					System.out.print("Title: ");
+					String title = in.next();
+					if (title.equalsIgnoreCase(".")) {
+						title = null;
+					}
+					System.out.print("Genre: ");
+					String genre = in.next();
+					if (genre.equalsIgnoreCase(".")) {
+						genre = null;
+					}
+
+					// Secondary data
+					System.out.print("Media type (Music/Video/Null) : ");
+					String type = in.next();
+					if (!type.equalsIgnoreCase("Music") && !type.equalsIgnoreCase("Video")) {
+						type = null;
+					}
+					
+					String spec1 = null;
+					String spec2 = null;
+					
+					if (type.equalsIgnoreCase("Music")) {
+
+						System.out.print("Artist: ");
+						spec1 = in.next();
+						if (spec1.equalsIgnoreCase(".")) {
+							spec1 = null;
+						}
+						System.out.print("Album: ");
+						spec2 = in.next();
+						if (spec2.equalsIgnoreCase(".")) {
+							spec2 = null;
+						}
+
+						
+					} else if (type.equalsIgnoreCase("Video")) {
+
+						System.out.print("Duration: ");
+						spec1 = in.next();
+						if (spec1.equalsIgnoreCase(".")) {
+							spec1 = null;
+						}
+						System.out.print("Rating: ");
+						spec2 = in.next();
+						if (spec2.equalsIgnoreCase(".")) {
+							spec2 = null;
+						}
+						
+					}
+
+					String[] req = {type, id, title, genre, spec1, spec2};
+					
+					System.out.println("The results are: ");
+					Playlist result = new Playlist("search result", PlaylistManager.search(playlists, req));
+					PlaylistManager.display(result);
+					
 				} else if (choice == 3) {
-					System.out.println("Sort");
+					
+					System.out.println("Sort all Media");
+					System.out.println("How do you want your playlist to sort by?");
+					System.out.println("1. Title     2. Genre     3. Artist     4. Album     5.Duration     6.Rating");
+					choice = Integer.parseInt(in.next());
+					String req[] = new String[2];
+					if (choice == 1){
+						req[0] = null;
+						req[1] = "title";
+					}else if (choice == 2){
+						req[0] = null;
+						req[1] = "genre";
+					}else if (choice == 3){
+						req[0] = "music";
+						req[1] = "artist";
+					}else if (choice == 4){
+						req[0] = "music";
+						req[1] = "album";
+					}else if (choice == 5){
+						req[0] = "video";
+						req[1] = "duration";
+					}else if (choice == 6){
+						req[0] = "video";
+						req[1] = "rating";
+					}
+					
+					System.out.println("Sorted: ");
+					PlaylistManager.display(PlaylistManager.sort(playlists, req));
+					
 				} else if (choice == 4) {
-					System.out.println("You are now logged out.");
+					System.out.println("You have logged out.");
 					user = null;
 					loop = false;
 				} else if (choice == 5) {

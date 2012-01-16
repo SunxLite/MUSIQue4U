@@ -49,10 +49,13 @@ class UserManager {
 
 					if (user != null)
 						selected = true;
+					
 				} else if (choice == 3) {
+					
 					// clear the user
 					user = null;
 					selected = true;
+					
 				} else {
 					System.out.println("The choice that you have specified is invalid. Please try again!");
 				}

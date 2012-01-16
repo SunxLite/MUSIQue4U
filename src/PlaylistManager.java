@@ -6,9 +6,9 @@
  Computer used: Sunny's Computer
  IDE used: Eclipse
  Purpose: A class library to manage media in playlists
- -it has methods that grabs the user's personal playlist
- -it includes multiple display methods that displays the specific data provided
- -it also contains playlist manipulation methods such as search and sort
+	-it has methods that grabs the user's personal playlist
+	-it includes multiple display methods that displays the specific data provided
+	-it also contains playlist manipulation methods such as search and sort
  */
 
 class PlaylistManager {
@@ -91,7 +91,7 @@ class PlaylistManager {
 			if (subClass.equalsIgnoreCase("Music")) {
 				for (int i = 0; i < items.length; i++) {
 					if (items[i] instanceof Music) { // Use of Abstraction
-						valid.addMedia((Music) items[i]); // TODO: See if casting works.. not required.
+						valid.addMedia((Music) items[i]);
 					}
 				}
 			} else if (subClass.equalsIgnoreCase("Video")) {
@@ -112,8 +112,7 @@ class PlaylistManager {
 
 	// ============================== SEARCH ==============================
 	static Media[] search(Playlist[] playlists, String[] req) {
-		// The require String array req[] follows the order [sub-class, Media id, title, genre, and secondary fields depending
-		// on subclass]
+		// The require String array req[] follows the order [sub-class, Media id, title, genre, and secondary fields depending on subclass]
 		Media[] given = getMedia(playlists);
 		given = sanitize(given, req);
 
@@ -138,7 +137,7 @@ class PlaylistManager {
 		for (int i = 0; i < given.length; i++) {
 			for (int a = 0; a < find.length; a++) {
 				if (given[i].equals(find)) { // When it matches what the user specified TODO: should be find[#], but no error?
-												// REQUIRE CASTING!!!
+												// REQUIRE CASTING!!!??
 					found.addMedia(given[i]);
 				}
 			}
@@ -170,8 +169,7 @@ class PlaylistManager {
 			int y = right;
 			Media pivot = data[right];
 
-			// Check sort style, since there is no eval functions in Java... TODO: Check which way it sorts..
-			// An alternative to this is to make another array and put the required data for sorting into it..
+			// Check sort style, since there is no eval functions in Java...
 			if (style[0] == null && style[1].equalsIgnoreCase("Title")) {
 				while (x != y) {
 					if (data[x].compareTitle(pivot) < 0) {
@@ -211,7 +209,7 @@ class PlaylistManager {
 				}
 			} else if (style[0].equalsIgnoreCase("Video") && style[1].equalsIgnoreCase("Duration")) {
 				while (x != y) {
-					if (((Video) data[x]).compareDuration((Video) pivot) < 0) { // TODO: Check if the order is right for this
+					if (((Video) data[x]).compareDuration((Video) pivot) < 0) {
 						x++;
 					} else {
 						swap(data, x, y);
