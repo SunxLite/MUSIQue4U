@@ -75,8 +75,7 @@ public class FileManager {
 
 		}
 
-		// doc.getDocumentElement().normalize(); // restore escaped text back to original
-		// get the list of user node... all the data inside <uesr> data here </user>
+		doc.getDocumentElement().normalize(); // remove empty text fields
 		NodeList nList = doc.getElementsByTagName("user");
 
 		for (int index = 0; index < nList.getLength(); index++) {
@@ -151,13 +150,15 @@ public class FileManager {
 
 		}
 
-		// doc.getDocumentElement().normalize();
-		NodeList nList = doc.getElementsByTagName("user");
+		doc.getDocumentElement().normalize();
+		NodeList nList = doc.getElementsByTagName("user"); // creates a nodelist containing all of the childnodes under the tag
+															// name of "user"
 
 		Element eElement = null;
 		boolean found = false;
 
-		for (int i = 0; i < nList.getLength() && !found; i++) {
+		for (int i = 0; i < nList.getLength() && !found; i++) { // goes through all of the nodes in the nodelist for a matching
+																// "username"
 			Node currentNode = nList.item(i);
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				eElement = (Element) currentNode;
@@ -177,7 +178,7 @@ public class FileManager {
 	}
 
 	static boolean addUser(User newUser) {
-		if (userExist(newUser.getUsername())) {
+		if (userExist(newUser.getUsername())) { // checks if the user already exists, prevents duplication
 			return false;
 
 		} else {
@@ -202,7 +203,7 @@ public class FileManager {
 			Node currentNode = doc.getFirstChild(); // get root node
 			Element data = (Element) currentNode; // transform into a element
 
-			Element user = doc.createElement("user");
+			Element user = doc.createElement("user"); // adds information into the xml data file
 			data.appendChild(user);
 
 			Element id = doc.createElement("id");
@@ -255,7 +256,8 @@ public class FileManager {
 		// Temporary use List to hold append the data
 		ArrayList<Playlist> tracking = new ArrayList<Playlist>();
 		boolean end = false;
-		int playlistChecker = 0;
+		int playlistChecker = 0; // since it is not provided the number of playlists the user has, this variable is used to keep
+									// track while accessing the user's playlists
 		Playlist currentPlaylist = null;
 
 		while (!end) {
@@ -266,8 +268,8 @@ public class FileManager {
 				doc = docBuilder.parse(listLoc);
 
 				doc.getDocumentElement().normalize();
-				NodeList mediaList = doc.getElementsByTagName("Media");
-				// ==================== CONFUSION ZONE! ====================
+				NodeList mediaList = doc.getElementsByTagName("Media"); // a nodelist that holds all childnodes under the tag
+																		// name of Media
 				Element eElement;
 				Media[] selection = new Media[mediaList.getLength()];
 				for (int temp = 0; temp < mediaList.getLength(); temp++) {
@@ -276,16 +278,18 @@ public class FileManager {
 					if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 						Media newMedia;
 						eElement = (Element) currentNode;
-						if (eElement.getAttribute("type").equals("music")) {
+						if (eElement.getAttribute("type").equals("music")) { // obtains information from data file if it's a
+																				// Music type
 							int id = Integer.parseInt(getTagValue("id", eElement).trim());
 							String title = getTagValue("title", eElement);
 							String genre = getTagValue("genre", eElement);
 							String artist = getTagValue("artist", eElement);
 							String album = getTagValue("album", eElement);
-							newMedia = new Music(id, title, genre, artist, album);
+							newMedia = new Music(id, title, genre, artist, album); // creates an instance of Music using the
+																					// above information
 
 						} else {
-							int id = Integer.parseInt(getTagValue("id", eElement).trim());
+							int id = Integer.parseInt(getTagValue("id", eElement).trim()); // for a Video type
 							String title = getTagValue("title", eElement);
 							String genre = getTagValue("genre", eElement);
 							double duration = Double.parseDouble(getTagValue("duration", eElement).trim());
@@ -304,7 +308,7 @@ public class FileManager {
 				playlistChecker++;
 
 			} catch (FileNotFoundException e) {
-				end = true; // TEMPORARY... better get a variable that tells how much playlist there is
+				end = true; // if the file does not exist anymore, it stops the while loop
 
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
@@ -338,8 +342,9 @@ public class FileManager {
 					Node currentNode = doc.getFirstChild(); // get root node
 					Element data = (Element) currentNode; // transform into a element
 					for (int x = 0; x < adding.length; x++) {
-						if (adding[x] instanceof Music) {
-							Element media = doc.createElement("Media");
+						if (adding[x] instanceof Music) { // checks if the object is a Music or a Video object
+							Element media = doc.createElement("Media"); // if Music, adds the following information into the
+																		// data file
 							media.setAttribute("type", "Music");
 							data.appendChild(media);
 
@@ -363,7 +368,7 @@ public class FileManager {
 							album.appendChild(doc.createTextNode(((Music) adding[x]).getAlbum() + ""));
 							media.appendChild(album);
 
-						} else {
+						} else { // if Video, adds the following information to the data file.
 							Element media = doc.createElement("Media");
 							media.setAttribute("type", "Video");
 							data.appendChild(media);
@@ -423,23 +428,29 @@ public class FileManager {
 	}
 
 	static void del(Media[] deling, Playlist selected, User user) {
-		Playlist[] matchingPlaylists = loadPlaylist(user);
+		Playlist[] matchingPlaylists = loadPlaylist(user); // loads the matching playlists of the user in the perimeter
 		boolean found = false;
-		for (int i = 0; i < matchingPlaylists.length && !found; i++) {
+		for (int i = 0; i < matchingPlaylists.length && !found; i++) { // compares and finds the right playlist under all of the
+																		// user's playlists
 			if (matchingPlaylists[i].equals(selected)) {
 				found = true;
 				try {
 					docBuilder = docBuilderFactory.newDocumentBuilder();
-					File listLoc = new File("../data/user/" + user.getID() + "/" + i + ".xml");
+					File listLoc = new File("../data/user/" + user.getID() + "/" + i + ".xml"); // access the corresponding user
+																								// data file
 					doc = docBuilder.parse(listLoc);
 
 					Node rootNode = doc.getFirstChild();
-					NodeList mediaList = doc.getElementsByTagName("Media");
+					NodeList mediaList = doc.getElementsByTagName("Media"); // creates a node list that contains all childnodes
+																			// under the tag name of "Media"
 					for (int x = 0; x < deling.length; x++) {
 						for (int y = 0; y < mediaList.getLength(); y++) {
-							Element currentElement = (Element) mediaList.item(y);
-							if (getTagValue("id", currentElement).equals(deling[x].getID() + "")) {
-								rootNode.removeChild(mediaList.item(y));
+							Element currentElement = (Element) mediaList.item(y); // creates an element of each of the nodes
+							if (getTagValue("id", currentElement).equals(deling[x].getID() + "")) { // compares the ID of Media
+																									// element with the Media
+																									// object in the perimeter
+								rootNode.removeChild(mediaList.item(y)); // removes all following childnodes under that Media
+																			// element
 							}
 						}
 					}
@@ -470,8 +481,8 @@ public class FileManager {
 	}
 
 	public static void edit(Media[] original, Media[] edited, Playlist selected, User user) {
-		del(original, selected, user);
-		add(edited, selected, user);
+		del(original, selected, user); // makes use of del class by deleting the original Media objects
+		add(edited, selected, user); // makes use of add class by adding the edited MEdia objects
 	}
 
 	// A custom class to quickly get tag values

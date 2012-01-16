@@ -14,39 +14,48 @@ Purpose: This is the main program.
 import java.util.Scanner;
 
 public class Musique4U {
-
+	// Variables uses obviously naming
 	// stores the current signed-in user
-	User user;
+	private User user;
 	// stores the current user's playlist data
-	Playlist[] list;
+	private Playlist[] playlists;
+	// Check if the program should quit
+	private boolean quit = false;
 
-	// class constructor
+	// constructor - used as a program initializer
 	public Musique4U() {
 
-		// GET DATA REQUIRED FOR THIS PROGRAM TO FUNCTION
-		// prompt for user to sign-in
-		user = UserManager.getUser();
-		// get user's playlist data
-		list = PlaylistManager.initialize(user);
-
 		// Program info
-		System.out.println("Musique4U ALPHA v0.8");
+		System.out.println("Musique4U ALPHA v0.9\n");
 
-		// presents program's main menu
-		menu();
+		while (!quit) {
+			// GET DATA REQUIRED FOR THIS PROGRAM TO FUNCTION
+			// prompt for user to sign-in, get user account before proceeding.
+			user = UserManager.getUser();
+			// When user want to quit the program for some reason
+			if (user == null) {
+				quit = true;
+			} else {
+				// get user's playlists
+				playlists = PlaylistManager.initialize(user);
 
-		// Terminate message
+				// presents program's main menu
+				menu();
+			}
+		}
+
+		// Terminating message
 		System.out.println("Good-bye, Have a nice day!");
 	}
 
-	// This is where most of the program will run in
+	// This is where most of the program will run from
 	void menu() {
 
 		// for user input
 		Scanner in = new Scanner(System.in);
 
 		// variable to check whether to continue executing the program
-		boolean quit = false;
+		boolean loop = true;
 		// string to store temporary input
 		String temp = null;
 		// stores the option the user have selected
@@ -55,36 +64,49 @@ public class Musique4U {
 		// A friendly greeting message
 		System.out.println("Hello, " + user + ", what do you want to do today?");
 
-		while (!quit) {
+		while (loop) {
 			try {
 				// Give user options to manipulate their media objects
-				System.out.println("Options:\n1. Manage Playlist\n2. Search\n3. Sharing\n4. Quit");
+				System.out.println("Options:\n1. Manage Playlist\n2. Search\n3. Sorting\n4. logout\n5. Quit\n");
 
 				// Command-Prompt looking prompt
 				System.out.print(user + ": ");
 				// get user input
 				temp = in.next();
+				System.out.println(); // formating
 				// convert the inputed String into int type
 				// maybe change it to text based when there is time
 				choice = Integer.parseInt(temp);
 
 				if (choice == 1) {
-					System.out.println("TODO: Manage Playlist");
+					System.out.println("You have choose to manage your playlist");
+					boolean stop = false;
+					while (!stop){
+					System.out.println("");
+					}
 				} else if (choice == 2) {
-					System.out.println("TODO: Search");
+					System.out.println("Search");
 				} else if (choice == 3) {
-					System.out.println("TODO: Share");
+					System.out.println("Sort");
 				} else if (choice == 4) {
-					System.out.println("The application will now quit!");
+					System.out.println("You are now logged out.");
+					user = null;
+					loop = false;
+				} else if (choice == 5) {
+					System.out.println("This application will now quit!");
+					user = null;
+					loop = false;
 					quit = true;
 				} else {
 					System.out.println("The choice that you have specified is invalid!");
 				}
 
-			} catch (NumberFormatException e) {
+			} catch (NumberFormatException e) { // When what is being entered is not an integer.
 				System.out.println("The value \"" + temp
 						+ "\" you have entered is not a valid integer.\nPlease input an integer!");
 			}
+
+			System.out.println(); // formating
 
 		}
 	}

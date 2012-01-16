@@ -43,7 +43,7 @@ abstract class Media {
 	}
 	
 	int getID(){
-		return id; //TODO: check it!
+		return id;
 	}
 
 	String getTitle() {
