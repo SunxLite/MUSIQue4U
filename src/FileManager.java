@@ -248,7 +248,7 @@ public class FileManager {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
 				doc = docBuilder.newDocument();
 				File userLoc = new File(root + "data/user/" + selected.getID());
-				boolean exists = userLoc.mkdir();
+				userLoc.mkdir();
 
 				listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
 				Document checkTest = docBuilder.parse(listLoc);

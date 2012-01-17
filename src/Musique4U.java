@@ -90,6 +90,7 @@ public class Musique4U {
 						String newName = in.nextLine().trim();
 						// Create a blank playlist, check if the playlist name is alredy taken.
 						boolean available = true;
+						
 						for (int i = 0; i < playlists.length; i++) {
 							if (newName.equalsIgnoreCase(playlists[i].getName())) {
 								available = false;
@@ -97,19 +98,21 @@ public class Musique4U {
 						}
 
 						if (available) {
-							Playlist newList = new Playlist(newName, null);
+							Playlist additional = new Playlist(newName, null);
 							System.out.println("You are creating a new playlist with the name \"" + newName
 									+ "\"\nAre you sure you want to add it to your collection? (y/n)");
+							
 							String confirmation = in.next();
 							if (confirmation.charAt(0) == 'y') {
 								// copy old array to another array and append an extra field
-								Playlist[] arr2 = new Playlist[playlists.length + 1];
+								Playlist[] newList = new Playlist[playlists.length + 1];
 								for (int i = 0; i < playlists.length; i++) {
-									arr2[i] = playlists[i];
+									newList[i] = playlists[i];
 								}
 								// append the new playlist to playlist array.
-								arr2[playlists.length] = newList;
-								playlists = arr2; // TODO: naming..!
+								newList[playlists.length] = additional;
+								playlists = newList; // TODO: naming..!
+								FileManager.addPlaylist(user, newName);
 								System.out.println("Playlist added to your collection");
 							} else {
 								System.out.println("You have cancelled the operation");

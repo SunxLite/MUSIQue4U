@@ -2,6 +2,6 @@ Musique4U is a simple music database application written in Java.
 It organizes your music playlist by Title, Artist, Genre, and Year released.
 It features a user profile system which allows personal playlist for multiple users.
 
-Alert: MAKE METHODS THAT CAN CREATES PLAYLISTS!
+Make Directory doesn't work properly... fix that.
 
 by Sunny Li, and Leo Liu
