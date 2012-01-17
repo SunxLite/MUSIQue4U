@@ -1,5 +1,5 @@
 /*
-Class Name: UserManager.java
+Class Name: UserManager
 Author: Sunny Li, Leo Liu
 Date: Dec 20, 2011
 School: A.Y. Jackson SS
@@ -23,7 +23,7 @@ class UserManager {
 	// Give sign-in options to user
 	static User getUser() {
 
-		System.out.println("Please login:\n1.Existing User\n2.Register\n3.Quit\n");
+		System.out.println("Login:  1.Existing User  2.Register  3.Quit");
 
 		// Check if user selected
 		boolean selected = false;

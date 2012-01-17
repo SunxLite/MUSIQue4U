@@ -1,14 +1,14 @@
 /*
-Class Name: User.java
+Class Name: User
 Author: Sunny Li, Leo Liu
 Date: Dec 22, 2011
 School: A.Y. Jackson SS
 Computer used: Sunny's Computer
 IDE used: Eclipse
 Purpose: Template for the User object.
-		-The user object contains an unique ID and username
-		-Personal information including name and age
-		-Also a password to keep profile secure from vandalism
+	-The user object contains an unique ID and username
+	-Personal information including name and age
+	-Also a password to keep profile secure from vandalism
  */
 
 class User {

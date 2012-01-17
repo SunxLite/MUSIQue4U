@@ -231,7 +231,7 @@ public class FileManager {
 			// Additionally create a default user media storage.
 			// Location: data/user/(#uid)/0.xml
 			// new user has been created, so get lastID provides the new user ID.
-			newPlaylistXML(new String(getLastID() + "/" + 0), "default");
+			initializePlaylist(getLastID());
 
 			return true; // TODO this is not safe...
 
@@ -241,18 +241,22 @@ public class FileManager {
 	static Playlist[] addPlaylist(User selected, String playlistName) {
 		int playlistChecker = 0;
 		boolean end = false;
-		File listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
+		File listLoc = null;
 
 		while (!end) {
 			try {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
 				doc = docBuilder.newDocument();
-				File userLoc = new File(root + "data/user/" + selected.getID());
-				userLoc.mkdir();
+
+				// requires user directory to be present, build one just in case
+				new File(root + "data/user/" + selected.getID()).mkdir();
 
 				listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
+				
+				//???
 				Document checkTest = docBuilder.parse(listLoc);
 				NodeList testExistence = checkTest.getElementsByTagName("Playlist");
+				
 				playlistChecker++;
 			} catch (FileNotFoundException e) {
 				end = true; // if the file does not exist anymore, it stops the while loop
@@ -550,7 +554,6 @@ public class FileManager {
 			Node lastNode = (Node) nList.item((nList.getLength() - 1));
 			Element lastElement = (Element) lastNode;
 			returningID = getTagValue("id", lastElement);
-			System.out.println("Last ID is " + returningID); // TODO
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -571,7 +574,7 @@ public class FileManager {
 	}
 
 	// A quick method to create a single playlist...
-	private static void newPlaylistXML(String fileLocation, String playlistName) {
+	private static void initializePlaylist(int userID) {
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			// Initializing a DOM structured document in memory
@@ -580,7 +583,7 @@ public class FileManager {
 			// Creating a root element for the XML file
 			Element rootElement = doc.createElement("Playlist");
 			// Give it an attribute
-			rootElement.setAttribute("name", playlistName);
+			rootElement.setAttribute("name", "default");
 			// Adding the root element to the document
 			doc.appendChild(rootElement);
 
@@ -591,14 +594,14 @@ public class FileManager {
 			// Input source
 			DOMSource src = new DOMSource(doc);
 			// The output stream
-			StreamResult out = new StreamResult(new File(root + "data/user/" + fileLocation + ".xml"));
-			// StreamResult out = new StreamResult(System.out);
+			StreamResult out = new StreamResult(new File(root + "data/user/" + userID + "/0.xml"));
+
+			// Create the user directory to store playlists
+			new File(root + "data/user/" + userID).mkdirs();
 
 			// Takes in the source and convert it to a format that works with the stream,
 			// and the stream can write the data into a file or print it on screen.
 			tf.transform(src, out);
-
-			System.out.println("Error here.."); // TODO: error
 
 		} catch (ParserConfigurationException e) {
 			System.out.println("Misconfigured Parser!");
