@@ -75,4 +75,8 @@ class Video extends Media {
 	String getRating() {
 		return rating;
 	}
+	
+	public String toString(){
+		return super.toString()+" | duration: "+duration+" | Rating: "+rating;
+	}
 }

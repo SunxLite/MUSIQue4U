@@ -67,4 +67,8 @@ class Music extends Media {
 	String getAlbum() {
 		return album;
 	}
+	
+	public String toString(){
+		return super.toString()+" | Artist: "+artist+" | Album: "+album;
+	}
 }

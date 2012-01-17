@@ -203,7 +203,7 @@ public class Musique4U {
 		PlaylistManager.display(playlists);
 
 		try {
-			System.out.print("\nSelect: ");
+			System.out.print("Select: ");
 			String selectedPlaylistName = in.readLine();
 
 			// Get the selected playlist

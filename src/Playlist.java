@@ -31,19 +31,23 @@ class Playlist {
 	void addMedia(Media item) {
 		// TODO: Check if the object is null
 		// This method will append a data to the list by creating a new list and overwriting it
-		Media[] temp = new Media[media.length + 1];
-
+		Media[] temp;
+		try {
+			temp = new Media[media.length + 1];
+		} catch (NullPointerException e) {
+			temp = new Media[1];
+		}
 		// copy data to new list
-		for (int i = 0; i < media.length; i++) {
+		for (int i = 0; i < temp.length-1; i++) { //media is unreliable here..
 			temp[i] = media[i];
 		}
-		temp[media.length] = item; // append the provided media into the playlist
+		temp[temp.length-1] = item; // append the provided media into the playlist
 
 		// overwrite
 		media = temp;
 	}
 
-	void removeMedia(Media item, User user) { //...
+	void removeMedia(Media item, User user) { // ...
 		// the Media item here is a temporary object that contains the same parameter of items that needs to be removed.
 		// can be used to mass remove Media with the same title, album, artist, etc..
 

@@ -25,6 +25,7 @@ class PlaylistManager {
 		for (int i = 0; i < playlist.length; i++) {
 			System.out.println(" + " + playlist[i]);
 		}
+		System.out.println(); //formating
 	}
 
 	// display what a specified playlist contains
@@ -37,9 +38,18 @@ class PlaylistManager {
 	// display the details of a specified array of media objects
 	static void display(Media[] media) {
 		System.out.println("Detailed Information:");
-		for (int i = 0; i < media.length; i++) {
-			System.out.println(media[i]);
+		if (media != null) {
+			for (int i = 0; i < media.length; i++) {
+				if (media[i] instanceof Music) {
+					System.out.println((Music) media[i]);
+				} else if (media[i] instanceof Video) {
+					System.out.println((Video) media[i]);
+				}
+			}
+		} else {
+			System.out.println("Playlist currently contains no media.");
 		}
+		System.out.println(); // formating
 	}
 
 	// get media object from numerous playlist
@@ -54,7 +64,12 @@ class PlaylistManager {
 			Media[] additional = playlists[i].getList();
 
 			// Make a new list and append its length
-			int initialLength = items.length;
+			int initialLength;
+			try {
+				initialLength = items.length;
+			} catch (NullPointerException e) {
+				initialLength = 0;
+			}
 			int additionalLength = additional.length;
 			Media temp[] = new Media[initialLength + additionalLength];
 
@@ -83,36 +98,37 @@ class PlaylistManager {
 		// Filter: Check whether the client wants to sort with secondary spec so to cast it down, null when its primary spec
 		// It uses a array instead of a single String because it allows additional class to be added with the same parameter
 		if (subClass != null)
-		if (subClass.equalsIgnoreCase("Music") || subClass.equalsIgnoreCase("Video")) {
+			if (subClass.equalsIgnoreCase("Music") || subClass.equalsIgnoreCase("Video")) {
 
-			// for casting down into its respected objects, and put it into playlist since it has pre-written methods
-			Playlist valid = new Playlist(); //enpty constructor instead of null value
+				// for casting down into its respected objects, and put it into playlist since it has pre-written methods
+				Playlist valid = new Playlist(); // enpty constructor instead of null value
 
-			if (subClass.equalsIgnoreCase("Music")) {
-				for (int i = 0; i < items.length; i++) {
-					if (items[i] instanceof Music) { // Use of Abstraction
-						valid.addMedia((Music) items[i]);
+				if (subClass.equalsIgnoreCase("Music")) {
+					for (int i = 0; i < items.length; i++) {
+						if (items[i] instanceof Music) { // Use of Abstraction
+							valid.addMedia((Music) items[i]);
+						}
+					}
+				} else if (subClass.equalsIgnoreCase("Video")) {
+					for (int i = 0; i < items.length; i++) {
+						if (items[i] instanceof Video) {
+							valid.addMedia((Video) items[i]);
+						}
 					}
 				}
-			} else if (subClass.equalsIgnoreCase("Video")) {
-				for (int i = 0; i < items.length; i++) {
-					if (items[i] instanceof Video) {
-						valid.addMedia((Video) items[i]);
-					}
-				}
+
+				// Retrieve the secondary objects, there should be a shorter way but I forgot..
+				Playlist[] toArr = { valid };
+				items = getMedia(toArr);
 			}
-
-			// Retrieve the secondary objects, there should be a shorter way but I forgot..
-			Playlist[] toArr = { valid };
-			items = getMedia(toArr);
-		}
 
 		return items;
 	}
 
 	// ============================== SEARCH ==============================
 	static Media[] search(Playlist[] playlists, String[] req) {
-		// The require String array req[] follows the order [sub-class, Media id, title, genre, and secondary fields depending on subclass]
+		// The require String array req[] follows the order [sub-class, Media id, title, genre, and secondary fields depending
+		// on subclass]
 		Media[] given = getMedia(playlists);
 		given = sanitize(given, req);
 
@@ -125,11 +141,16 @@ class PlaylistManager {
 		Media[] find = new Media[2];
 		Playlist found = new Playlist();
 
-		//creat media object to search with
-		if (req[0].equalsIgnoreCase("Music")) {
-			find[0] = new Music(id, title, genre, req[4], req[5]);
-		} else if (req[0].equalsIgnoreCase("Video")) {
-			find[0] = new Video(id, title, genre, Double.parseDouble(req[4]), req[5]);
+		// creat media object to search with
+		if (req[0] != null) {
+			if (req[0].equalsIgnoreCase("Music")) {
+				find[0] = new Music(id, title, genre, req[4], req[5]);
+			} else if (req[0].equalsIgnoreCase("Video")) {
+				find[0] = new Video(id, title, genre, Double.parseDouble(req[4]), req[5]);
+			} else {
+				find[0] = new Music(id, title, genre, null, null);
+				find[1] = new Video(id, title, genre, null, null);
+			}
 		} else {
 			find[0] = new Music(id, title, genre, null, null);
 			find[1] = new Video(id, title, genre, null, null);
@@ -143,7 +164,7 @@ class PlaylistManager {
 			}
 		}
 
-		return found.getList(); //return an array of media that matches search parameters
+		return found.getList(); // return an array of media that matches search parameters
 	}
 
 	// ============================== SORT ==============================

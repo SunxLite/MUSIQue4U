@@ -32,7 +32,7 @@ public class FileManager {
 	private static DocumentBuilder docBuilder = null; // Has to initialize inside method to catch ParserConfigurationException
 	// Source File
 	private static String root = ""; // empty string for Eclipse IDE, "../" for JGrasp
-	private static File usrFile = new File(root + "data/User.xml");
+	private static File usrFile = new File(root + "data/User.xml"); //location of the user data file
 	private static Document doc = null; // requires catching IOException
 
 	// Check if the user data file contains a specified user
@@ -140,7 +140,7 @@ public class FileManager {
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				eElement = (Element) currentNode;
 
-				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {
+				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {// comparing username
 					found = true;
 				}
 
@@ -253,13 +253,14 @@ public class FileManager {
 
 				listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
 
-				Document checkTest = docBuilder.parse(listLoc);
-				NodeList testExistence = checkTest.getElementsByTagName("Playlist"); //???
+				Document testDoc = docBuilder.parse(listLoc);
+				//checks for the existence of the file, if the file does not exist, this line of code will be caught by FileNotFoundException
+				NodeList testExistence = testDoc.getElementsByTagName("Playlist");
 
 				playlistChecker++;
 			} catch (FileNotFoundException e) {
 				end = true; // if the file does not exist anymore, it stops the while loop
-				Element playList = doc.createElement("Playlist"); // adds information into the xml data file
+				Element playList = doc.createElement("Playlist"); // adds the basic layout of a playlist data file containing nothing but the name of the playlist
 				playList.setAttribute("name", playlistName);
 				doc.appendChild(playList);
 			} catch (ParserConfigurationException e) {
@@ -322,7 +323,7 @@ public class FileManager {
 					if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 						Media newMedia;
 						eElement = (Element) currentNode;
-						if (eElement.getAttribute("type").equals("music")) { // obtains information from data file if it's a
+						if (eElement.getAttribute("type").equalsIgnoreCase("music")) { // obtains information from data file if it's a
 																				// Music type
 							int id = Integer.parseInt(getTagValue("id", eElement).trim());
 							String title = getTagValue("title", eElement);
@@ -355,7 +356,8 @@ public class FileManager {
 				end = true; // if the file does not exist anymore, it stops the while loop
 
 			} catch (NullPointerException e) {
-				System.out.println("Null Pointer");
+				e.printStackTrace();
+				System.out.println("Null Pointer @ initializer");
 
 			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
@@ -396,7 +398,7 @@ public class FileManager {
 						data.appendChild(media);
 
 						Element id = doc.createElement("id");
-						id.appendChild(doc.createTextNode(getLastMediaID(adding) + ""));
+						id.appendChild(doc.createTextNode(getLastMediaID(adding)-1 + ""));
 						media.appendChild(id);
 
 						Element title = doc.createElement("title");
@@ -421,7 +423,7 @@ public class FileManager {
 						data.appendChild(media);
 
 						Element id = doc.createElement("id");
-						id.appendChild(doc.createTextNode(getLastMediaID(adding) + ""));
+						id.appendChild(doc.createTextNode(getLastMediaID(adding)-1 + ""));
 						media.appendChild(id);
 
 						Element title = doc.createElement("title");
