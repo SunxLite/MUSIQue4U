@@ -1,29 +1,29 @@
 /*
-Class Name: FileManager.java
+Class Name: FileManager
 Author: Leo Liu, Sunny Li
 Date: Jan 10, 2011
 School: A.Y. Jackson SS
 Computer used: TDSB, Sunny's Computer, Leo's Computer
 IDE used: JGrasp, Eclipse
-Purpose: The FileManager class provides a library of methods to handle file data.
-			-Library contains: userExist, checkPass, loadUser...
-			-Code way too repetitive... consider using global variables
+Purpose: The FileManager class provides a library of methods to handle file input/output.
  */
 
 import java.io.File; //For creating file
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList; //Used to temporally hold an unknown amount of data
+import java.io.FileNotFoundException; //File does not exist
+import java.io.IOException; //Input/Output error
+import java.util.ArrayList; //Used to temporally hold an unknown array of data
 
-//Java provided classes allowing the processing of XML documents: JAXP
+//Java bundled classes for XML processing
+//JAXP: Java API for XML Processing
 import javax.xml.parsers.*; //for reading
 import javax.xml.transform.*; //for outputting
 import javax.xml.transform.dom.DOMSource; //document source
 import javax.xml.transform.stream.StreamResult; //output stream
 
-//Uses W3C's DOM model - W3C organization manages the XML specification
+import org.xml.sax.SAXException; //SAX is partially used by JAXP to read data
+
+//W3C's DOM model - W3C manages the XML specification
 import org.w3c.dom.*; //for data manipulation
-import org.xml.sax.SAXException; //SAX is also used to parse Document...
 
 public class FileManager {
 
@@ -33,11 +33,10 @@ public class FileManager {
 	// Source File
 	private static String root = ""; // empty string for Eclipse IDE, "../" for JGrasp
 	private static File usrFile = new File(root + "data/User.xml");
-	private static Document doc = null; // catch IOException in method
+	private static Document doc = null; // requires catching IOException
 
 	// Check if the user data file contains a specified user
 	static boolean userExist(String username) {
-		boolean exist = false;
 
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -54,7 +53,7 @@ public class FileManager {
 
 		}
 
-		doc.getDocumentElement().normalize(); // remove empty text fields
+		// doc.getDocumentElement().normalize(); // remove empty text fields
 		NodeList nList = doc.getElementsByTagName("user");
 
 		for (int index = 0; index < nList.getLength(); index++) {
@@ -63,18 +62,16 @@ public class FileManager {
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) currentNode;
 				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {
-					exist = true;
-
+					return true; // Username found
 				}
 			}
-		}
-		return exist;
 
+		}
+		return false; // Username Not found
 	}
 
 	// Check if the log-in information provided is valid
 	static boolean checkPass(String username, String password) {
-		boolean valid = false;
 
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -91,7 +88,7 @@ public class FileManager {
 
 		}
 
-		doc.getDocumentElement().normalize();
+		// doc.getDocumentElement().normalize();
 		NodeList nList = doc.getElementsByTagName("user");
 
 		for (int index = 0; index < nList.getLength(); index++) {
@@ -99,19 +96,19 @@ public class FileManager {
 
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) currentNode;
+
 				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {
 					if (getTagValue("pass", eElement).equals(password)) {
-
-						valid = true;
+						return true; // data matches, valid.
 					}
 				}
+
 			}
 		}
-
-		return valid;
+		return false; // User not found or data does not match, invalid.
 	}
 
-	// load the specified user's detail and return it
+	// load the specified user information, create the User object, and return it.
 	static User loadUser(String username) {
 
 		try {
@@ -129,37 +126,42 @@ public class FileManager {
 
 		}
 
-		doc.getDocumentElement().normalize();
-		NodeList nList = doc.getElementsByTagName("user"); // creates a nodelist containing all of the childnodes under the tag
-															// name of "user"
+		// doc.getDocumentElement().normalize();
+		// creates a nodelist containing all of the childnodes under the tag name of "user"
+		NodeList nList = doc.getElementsByTagName("user");
 
 		Element eElement = null;
 		boolean found = false;
 
-		for (int i = 0; i < nList.getLength() && !found; i++) { // goes through all of the nodes in the nodelist for a matching
-																// "username"
+		// goes through all of the nodes in the nodelist for a matching "username"
+		for (int i = 0; i < nList.getLength() && !found; i++) {
 			Node currentNode = nList.item(i);
+
 			if (currentNode.getNodeType() == Node.ELEMENT_NODE) {
 				eElement = (Element) currentNode;
+
 				if (getTagValue("username", eElement).equalsIgnoreCase(username)) {
 					found = true;
-
 				}
+
 			}
 		}
 
-		User chosen = new User(Integer.parseInt(getTagValue("id", eElement).trim()), getTagValue("username", eElement),
-				getTagValue("pass", eElement), getTagValue("name", eElement), Integer.parseInt(getTagValue("age", eElement)
-						.trim()));
+		if (found) {
+			return new User(Integer.parseInt(getTagValue("id", eElement).trim()), getTagValue("username", eElement),
+					getTagValue("pass", eElement), getTagValue("name", eElement), Integer.parseInt(getTagValue("age", eElement)
+							.trim()));
 
-		return chosen;
-
+		} else { // User not found.
+			return null;
+		}
 	}
 
 	// Write a new user into the user data file by appending to it
 	static boolean addUser(User newUser) {
 		if (userExist(newUser.getUsername())) { // checks if the user already exists, prevents duplication
 			return false;
+
 		} else {
 
 			try {
@@ -227,7 +229,9 @@ public class FileManager {
 			}
 
 			// Additionally create a default user media storage.
-			newPlaylistXML(new String((getLastID() + 1) + "/" + 0), "default");
+			// Location: data/user/(#uid)/0.xml
+			// new user has been created, so get lastID provides the new user ID.
+			newPlaylistXML(new String(getLastID() + "/" + 0), "default");
 
 			return true; // TODO this is not safe...
 
@@ -238,7 +242,7 @@ public class FileManager {
 		int playlistChecker = 0;
 		boolean end = false;
 		File listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
-		;
+
 		while (!end) {
 			try {
 				docBuilder = docBuilderFactory.newDocumentBuilder();
@@ -542,10 +546,11 @@ public class FileManager {
 		try {
 			Document docu = docBuilder.parse(usrFile);
 			NodeList nList = docu.getElementsByTagName("user");
-			// This assumes that the last user in the data file should have the last id... which it should
+			// This assumes that the last user in the data file should have the last id... it should.
 			Node lastNode = (Node) nList.item((nList.getLength() - 1));
 			Element lastElement = (Element) lastNode;
 			returningID = getTagValue("id", lastElement);
+			System.out.println("Last ID is " + returningID); // TODO
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -554,6 +559,8 @@ public class FileManager {
 		} catch (ArrayIndexOutOfBoundsException e) { // when there is no user in database..
 			return 0;
 		}
+
+		// Since its from the database file, we assume that the value is correct.
 		return Integer.parseInt(returningID.trim());
 
 	}
@@ -561,11 +568,10 @@ public class FileManager {
 	// A custom class to quickly get the last Media Id number
 	private static int getLastMediaID(Media reference) {
 		return reference.getTotal() + 1;
-
 	}
 
 	// A quick method to create a single playlist...
-	private static void newPlaylistXML(String fileName, String name) {
+	private static void newPlaylistXML(String fileLocation, String playlistName) {
 		try {
 			docBuilder = docBuilderFactory.newDocumentBuilder();
 			// Initializing a DOM structured document in memory
@@ -574,7 +580,7 @@ public class FileManager {
 			// Creating a root element for the XML file
 			Element rootElement = doc.createElement("Playlist");
 			// Give it an attribute
-			rootElement.setAttribute("name", name);
+			rootElement.setAttribute("name", playlistName);
 			// Adding the root element to the document
 			doc.appendChild(rootElement);
 
@@ -585,20 +591,23 @@ public class FileManager {
 			// Input source
 			DOMSource src = new DOMSource(doc);
 			// The output stream
-			StreamResult out = new StreamResult(new File(root + "data/user/" + fileName + ".xml"));
+			StreamResult out = new StreamResult(new File(root + "data/user/" + fileLocation + ".xml"));
 			// StreamResult out = new StreamResult(System.out);
 
 			// Takes in the source and convert it to a format that works with the stream,
 			// and the stream can write the data into a file or print it on screen.
 			tf.transform(src, out);
 
+			System.out.println("Error here.."); // TODO: error
+
 		} catch (ParserConfigurationException e) {
 			System.out.println("Misconfigured Parser!");
 			// The machine may not have the required java classes but this is unlikely as
 			// Java comes bundled with some XML handling classes by default.
-			// So it is likely that the computer is misconfigured.
 		} catch (TransformerException e) {
-			System.out.println("Unable to print data");
+			e.printStackTrace();
+			System.out.println("Unable to print data to stream!");
+			// In this case, probably the directory does not exist.
 		}
 	}
 }

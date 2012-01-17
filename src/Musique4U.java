@@ -1,63 +1,65 @@
 /*
-Class Name: Musique4U.java
+Class Name: Musique4U
 Author: Sunny Li, Leo Liu
 Date: Dec 20, 2011
 School: A.Y. Jackson SS
 Computer used: Sunny's Computer
 IDE used: Eclipse
-Purpose: This is the main program.
-		-It initializes the program by first prompting the user to log-in or register, and
-		-then it presents a menu for the user to do stuff with their playlists such as add, delete, or modify their media objects
+Purpose: This is the main class. It initializes the program by prompting the user to log-in or register, then it presents
+			a menu to the user to edit their playlists such as to add, delete, or modify their media in their playlist.
  */
 
 import java.util.Scanner;
 
 public class Musique4U {
-	// Variables uses obviously naming
-	// stores the current signed-in user
+	// Stores the current signed-in user
 	private User user;
-	// stores the current user's playlist data
+	// Stores the current user's playlist data
 	private Playlist[] playlists;
-	// Check if the program should quit
+	// Check if user want to exit program
 	private boolean quit = false;
 
-	// constructor - used as a program initializer
+	// Constructor - starts to program
 	public Musique4U() {
 
 		// Program info
-		System.out.println("Musique4U V1.0\n");
+		System.out.println("Musique4U V1.1\n");
 
 		while (!quit) {
-			// GET DATA REQUIRED FOR THIS PROGRAM TO FUNCTION
-			// prompt for user to sign-in, get user account before proceeding.
+			// Before the program can function properly, we need to get the user info.
+
+			// Runs method which prompt user to sign-in, get user account before proceeding.
 			user = UserManager.getUser();
-			// When user want to quit the program for some reason
+			
+			// For cases when the user want to quit program prior to logging in.
 			if (user == null) {
 				quit = true;
-			} else {
-				// get user's playlists
-				playlists = PlaylistManager.initialize(user);
 
-				// presents program's main menu
+			} else { // Receives user object, continue.
+				
+				// Get user's playlists
+				playlists = PlaylistManager.initialize(user);
+				
+				// presents program's main menu for user to edit their playlists
 				menu();
 			}
 		}
-
-		// Terminating message
+		
+		// Final message before program halts.
 		System.out.println("Good-bye, Have a nice day!");
 	}
 
-	// This is where most of the program will run from
+	// Main menu providing options to user for playlist editing.
 	void menu() {
 
-		// for user input
+		// A Scanner to get user input
 		Scanner in = new Scanner(System.in);
 
-		// variable to check whether to continue executing the program
+		// Variable to check whether to continue looping the prompts.
 		boolean loop = true;
-		// string to store temporary input
+		// Store any temporary String inputs
 		String temp = null;
-		// stores the option the user have selected
+		// Stores number choices the user have selected
 		int choice;
 
 		// A friendly greeting message
@@ -65,17 +67,16 @@ public class Musique4U {
 
 		while (loop) {
 			try {
-				// Give user options to manipulate their media objects
-				System.out.println("Options:\n1. Manage Playlist\n2. Search\n3. Sorting\n4. logout\n5. Quit\n");
+				// Prompt, helpful hints.
+				System.out.println("Options:  1. Manage Playlist  2. Search  3. Sorting  4. logout  5. Quit\n");
 
 				// Command-Prompt looking prompt
 				System.out.print(user + ": ");
-				// get user input
-				temp = in.next();
-				System.out.println(); // formating
-				// convert the inputed String into int type
-				// maybe change it to text based when there is time
-				choice = Integer.parseInt(temp);
+
+				// Get selected Option
+				choice = Integer.parseInt(in.next());
+				
+				System.out.println(); // Skip line for formating
 
 				if (choice == 1) { // Manage Playlist, create playlist, add or remove media from playlist.
 					System.out.println("You have choose to manage your playlist");
@@ -108,7 +109,7 @@ public class Musique4U {
 								}
 								// append the new playlist to playlist array.
 								arr2[playlists.length] = newList;
-								playlists = arr2; //TODO: naming..!
+								playlists = arr2; // TODO: naming..!
 								System.out.println("Playlist added to your collection");
 							} else {
 								System.out.println("You have cancelled the operation");
@@ -158,8 +159,9 @@ public class Musique4U {
 
 									Media[] newMusic = new Media[1];
 									newMusic[0] = new Music(Media.total + 1, info[0], info[1], info[2], info[3]);
-									selected.addMedia(newMusic[0]); //add locally
-									FileManager.add(newMusic, selected, user); //add newMusic into selected playlist which belongs to user...
+									selected.addMedia(newMusic[0]); // add locally
+									FileManager.add(newMusic, selected, user); // add newMusic into selected playlist which
+																				// belongs to user...
 									System.out.println("added to playlist!");
 								} else if (choice == 2) {
 									System.out.print("Duration(# of minutes): ");
@@ -168,11 +170,12 @@ public class Musique4U {
 									info[3] = in.next();
 
 									try {
-									Media[] newVideo = new Media[1];
-									newVideo[0] = new Video(Media.total + 1, info[0], info[1], Double.parseDouble(info[2]), info[3]);
-									selected.addMedia(newVideo[0]);
-									FileManager.add(newVideo, selected, user);
-									System.out.println("Added to playlist");
+										Media[] newVideo = new Media[1];
+										newVideo[0] = new Video(Media.total + 1, info[0], info[1], Double.parseDouble(info[2]),
+												info[3]);
+										selected.addMedia(newVideo[0]);
+										FileManager.add(newVideo, selected, user);
+										System.out.println("Added to playlist");
 									} catch (NumberFormatException e) {
 										System.out.println("The information you have provide is invalid.");
 									}
@@ -210,7 +213,7 @@ public class Musique4U {
 									try {
 										selected.removeMedia(new Video(-1, info[0], info[1], Double.parseDouble(info[2]),
 												info[3]), user);
-												System.out.println("Media removed from playlist");
+										System.out.println("Media removed from playlist");
 									} catch (NumberFormatException e) {
 										System.out.println("The information that you have provided is invalid.\nQuitting.");
 									}
@@ -337,5 +340,9 @@ public class Musique4U {
 			System.out.println(); // formating
 
 		}
+	}
+	
+	void managePlaylistInterface(){
+		
 	}
 }
