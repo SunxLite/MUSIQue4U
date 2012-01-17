@@ -252,11 +252,10 @@ public class FileManager {
 				new File(root + "data/user/" + selected.getID()).mkdir();
 
 				listLoc = new File(root + "data/user/" + selected.getID() + "/" + playlistChecker + ".xml");
-				
-				//???
+
 				Document checkTest = docBuilder.parse(listLoc);
-				NodeList testExistence = checkTest.getElementsByTagName("Playlist");
-				
+				NodeList testExistence = checkTest.getElementsByTagName("Playlist"); //???
+
 				playlistChecker++;
 			} catch (FileNotFoundException e) {
 				end = true; // if the file does not exist anymore, it stops the while loop
@@ -376,7 +375,7 @@ public class FileManager {
 	}
 
 	// add a media data to playlist
-	static void add(Media[] adding, Playlist selected, User user) {
+	static void add(Media adding, Playlist selected, User user) {
 		Playlist[] matchingPlaylists = loadPlaylist(user);
 		boolean found = false;
 		for (int i = 0; i < matchingPlaylists.length && !found; i++) {
@@ -390,69 +389,67 @@ public class FileManager {
 
 					Node currentNode = doc.getFirstChild(); // get root node
 					Element data = (Element) currentNode; // transform into a element
-					for (int x = 0; x < adding.length; x++) {
-						if (adding[x] instanceof Music) { // checks if the object is a Music or a Video object
-							Element media = doc.createElement("Media"); // if Music, adds the following information into the
-																		// data file
-							media.setAttribute("type", "Music");
-							data.appendChild(media);
+					if (adding instanceof Music) { // checks if the object is a Music or a Video object
+						Element media = doc.createElement("Media"); // if Music, adds the following information into the
+																	// data file
+						media.setAttribute("type", "Music");
+						data.appendChild(media);
 
-							Element id = doc.createElement("id");
-							id.appendChild(doc.createTextNode(getLastMediaID(adding[x]) + ""));
-							media.appendChild(id);
+						Element id = doc.createElement("id");
+						id.appendChild(doc.createTextNode(getLastMediaID(adding) + ""));
+						media.appendChild(id);
 
-							Element title = doc.createElement("title");
-							title.appendChild(doc.createTextNode(adding[x].getTitle()));
-							media.appendChild(title);
+						Element title = doc.createElement("title");
+						title.appendChild(doc.createTextNode(adding.getTitle()));
+						media.appendChild(title);
 
-							Element genre = doc.createElement("genre");
-							genre.appendChild(doc.createTextNode(adding[x].getGenre()));
-							media.appendChild(genre);
+						Element genre = doc.createElement("genre");
+						genre.appendChild(doc.createTextNode(adding.getGenre()));
+						media.appendChild(genre);
 
-							Element artist = doc.createElement("artist");
-							artist.appendChild(doc.createTextNode(((Music) adding[x]).getArtist()));
-							media.appendChild(artist);
+						Element artist = doc.createElement("artist");
+						artist.appendChild(doc.createTextNode(((Music) adding).getArtist()));
+						media.appendChild(artist);
 
-							Element album = doc.createElement("album");
-							album.appendChild(doc.createTextNode(((Music) adding[x]).getAlbum() + ""));
-							media.appendChild(album);
+						Element album = doc.createElement("album");
+						album.appendChild(doc.createTextNode(((Music) adding).getAlbum() + ""));
+						media.appendChild(album);
 
-						} else { // if Video, adds the following information to the data file.
-							Element media = doc.createElement("Media");
-							media.setAttribute("type", "Video");
-							data.appendChild(media);
+					} else { // if Video, adds the following information to the data file.
+						Element media = doc.createElement("Media");
+						media.setAttribute("type", "Video");
+						data.appendChild(media);
 
-							Element id = doc.createElement("id");
-							id.appendChild(doc.createTextNode(getLastMediaID(adding[x]) + ""));
-							media.appendChild(id);
+						Element id = doc.createElement("id");
+						id.appendChild(doc.createTextNode(getLastMediaID(adding) + ""));
+						media.appendChild(id);
 
-							Element title = doc.createElement("title");
-							title.appendChild(doc.createTextNode(adding[x].getTitle()));
-							media.appendChild(title);
+						Element title = doc.createElement("title");
+						title.appendChild(doc.createTextNode(adding.getTitle()));
+						media.appendChild(title);
 
-							Element genre = doc.createElement("genre");
-							genre.appendChild(doc.createTextNode(adding[x].getGenre()));
-							media.appendChild(genre);
+						Element genre = doc.createElement("genre");
+						genre.appendChild(doc.createTextNode(adding.getGenre()));
+						media.appendChild(genre);
 
-							Element duration = doc.createElement("duration");
-							duration.appendChild(doc.createTextNode(((Video) adding[x]).getDuration() + ""));
-							media.appendChild(duration);
+						Element duration = doc.createElement("duration");
+						duration.appendChild(doc.createTextNode(((Video) adding).getDuration() + ""));
+						media.appendChild(duration);
 
-							Element rating = doc.createElement("rating");
-							rating.appendChild(doc.createTextNode(((Video) adding[x]).getRating()));
-							media.appendChild(rating);
-
-						}
-						Transformer transformer = TransformerFactory.newInstance().newTransformer();
-
-						DOMSource source = new DOMSource(doc);
-						StreamResult output = new StreamResult(listLoc);
-
-						// make the output look neat, or make it super hard to see by not setting indent
-						transformer.setOutputProperty("indent", "yes");
-						transformer.transform(source, output);
+						Element rating = doc.createElement("rating");
+						rating.appendChild(doc.createTextNode(((Video) adding).getRating()));
+						media.appendChild(rating);
 
 					}
+					Transformer transformer = TransformerFactory.newInstance().newTransformer();
+
+					DOMSource source = new DOMSource(doc);
+					StreamResult output = new StreamResult(listLoc);
+
+					// make the output look neat, or make it super hard to see by not setting indent
+					transformer.setOutputProperty("indent", "yes");
+					transformer.transform(source, output);
+
 				} catch (ParserConfigurationException e) {
 					e.printStackTrace();
 
@@ -476,32 +473,32 @@ public class FileManager {
 		}
 	}
 
-	static void del(Media[] deling, Playlist selected, User user) {
+	static void del(Media deling, Playlist selected, User user) {
 		Playlist[] matchingPlaylists = loadPlaylist(user); // loads the matching playlists of the user in the perimeter
 		boolean found = false;
-		for (int i = 0; i < matchingPlaylists.length && !found; i++) { // compares and finds the right playlist under all of the
-																		// user's playlists
+
+		// compares and finds the right playlist under all of the user's playlists
+		for (int i = 0; i < matchingPlaylists.length && !found; i++) {
 			if (matchingPlaylists[i].equals(selected)) {
 				found = true;
 				try {
 					docBuilder = docBuilderFactory.newDocumentBuilder();
-					File listLoc = new File(root + "data/user/" + user.getID() + "/" + i + ".xml"); // access the corresponding
-																									// user
-																									// data file
+
+					// access the corresponding user data file
+					File listLoc = new File(root + "data/user/" + user.getID() + "/" + i + ".xml");
 					doc = docBuilder.parse(listLoc);
 
 					Node rootNode = doc.getFirstChild();
-					NodeList mediaList = doc.getElementsByTagName("Media"); // creates a node list that contains all childnodes
-																			// under the tag name of "Media"
-					for (int x = 0; x < deling.length; x++) {
-						for (int y = 0; y < mediaList.getLength(); y++) {
-							Element currentElement = (Element) mediaList.item(y); // creates an element of each of the nodes
-							if (getTagValue("id", currentElement).equals(deling[x].getID() + "")) { // compares the ID of Media
-																									// element with the Media
-																									// object in the perimeter
-								rootNode.removeChild(mediaList.item(y)); // removes all following childnodes under that Media
-																			// element
-							}
+					// creates a node list that contains all childnodes under the tag name of "Media"
+					NodeList mediaList = doc.getElementsByTagName("Media");
+					for (int y = 0; y < mediaList.getLength(); y++) {
+						// creates an element of each of the nodes
+						Element currentElement = (Element) mediaList.item(y);
+
+						// compares the ID of Media element with the Media object in the perimeter
+						if (getTagValue("id", currentElement).equals(deling.getID() + "")) {
+							// removes all following childnodes under that Media element
+							rootNode.removeChild(mediaList.item(y));
 						}
 					}
 					Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -530,7 +527,7 @@ public class FileManager {
 		}
 	}
 
-	public static void edit(Media[] original, Media[] edited, Playlist selected, User user) {
+	public static void edit(Media original, Media edited, Playlist selected, User user) {
 		del(original, selected, user); // makes use of del class by deleting the original Media objects
 		add(edited, selected, user); // makes use of add class by adding the edited MEdia objects
 	}
@@ -570,7 +567,7 @@ public class FileManager {
 
 	// A custom class to quickly get the last Media Id number
 	private static int getLastMediaID(Media reference) {
-		return reference.getTotal() + 1;
+		return reference.getTotal();
 	}
 
 	// A quick method to create a single playlist...

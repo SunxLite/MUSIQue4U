@@ -1,5 +1,5 @@
 /*
- Class Name: PlaylistManger.java
+ Class Name: PlaylistManger
  Author: Sunny Li, Leo Liu
  Date: Dec 27, 2011
  School: A.Y. Jackson SS

@@ -5,7 +5,7 @@ Date: Dec 20, 2011
 School: A.Y. Jackson SS
 Computer used: Sunny's Computer
 IDE used: Eclipse
-Purpose: A library class that manages the user object.
+Purpose: A library class that contains methods which manages user objects.
 		It contains methods that specifically:
 		- presents options for the user to log-in
 		- method for logging-in part

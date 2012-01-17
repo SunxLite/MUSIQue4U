@@ -1,5 +1,5 @@
 /*
-Class Name: Music.java
+Class Name: Music
 Author: Sunny Li, Leo Liu
 Date: Jan 11, 2011
 School: A.Y. Jackson SS

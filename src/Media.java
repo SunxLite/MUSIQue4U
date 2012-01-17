@@ -1,5 +1,5 @@
 /*
-Class Name: Media.java
+Class Name: Media
 Author: Sunny Li, Leo Liu
 Date: Jan 10, 2011
 School: A.Y. Jackson SS

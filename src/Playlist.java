@@ -1,5 +1,5 @@
 /*
-Class Name: Playlist.java
+Class Name: Playlist
 Author: Sunny Li, Leo Liu
 Date: Dec 31, 2011
 School: A.Y. Jackson SS
@@ -51,9 +51,7 @@ class Playlist {
 		int removed = 0;
 		for (int i = 0; i < media.length; i++) {
 			if (media[i].equals(item)) {
-				Media[] deled = new Media[1]; // TODO: look at this added code..
-				deled[0] = media[i];
-				FileManager.del(deled, this, user); // ...
+				FileManager.del(media[i], this, user); // ...
 				media[i] = null;
 				removed++;
 			}
