@@ -53,12 +53,17 @@ class Playlist {
 
 		// remove matching item(s)...
 		int removed = 0;
+
+		if (media != null){ //test if playlist contains any edia object
 		for (int i = 0; i < media.length; i++) {
 			if (media[i].equals(item)) {
 				FileManager.del(media[i], this, user); // ...
 				media[i] = null;
 				removed++;
 			}
+		}
+} else {
+			System.out.println("No media present in this playlist.");
 		}
 
 		// copy data to new array

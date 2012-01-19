@@ -13,13 +13,15 @@ abstract class Media {
 	protected int id;
 	protected String title;
 	protected String genre;
-	protected static int total = 0;
+	protected static int maxID = 0;
 
 	public Media(int id, String title, String genre) {
 		this.id = id;
 		this.title = title;
 		this.genre = genre;
-		total++;
+if (id > maxID){
+maxID = id;
+}
 	}
 
 	abstract boolean equals(Media other);
@@ -34,12 +36,12 @@ abstract class Media {
 	}
 	
 	int compareGenre(Media other){
-		return this.genre.compareToIgnoreCase(other.title);
+		return this.genre.compareToIgnoreCase(other.genre);
 	}
 	
 	// GETTERS, inherited
-	int getTotal() {
-		return total;
+	int getMaxID() {
+		return maxID;
 	}
 	
 	int getID(){

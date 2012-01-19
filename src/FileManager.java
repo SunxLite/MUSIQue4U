@@ -31,7 +31,7 @@ public class FileManager {
 	private static DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 	private static DocumentBuilder docBuilder = null; // Has to initialize inside method to catch ParserConfigurationException
 	// Source File
-	private static String root = ""; // empty string for Eclipse IDE, "../" for JGrasp
+	private static String root = "../"; // empty string for Eclipse IDE, "../" for JGrasp
 	private static File usrFile = new File(root + "data/User.xml"); //location of the user data file
 	private static Document doc = null; // requires catching IOException
 
@@ -290,6 +290,7 @@ public class FileManager {
 			e.printStackTrace();
 
 		} catch (TransformerException e) {
+System.out.println("You may not have enough disk space to store your data.");
 			e.printStackTrace();
 
 		}
@@ -398,7 +399,7 @@ public class FileManager {
 						data.appendChild(media);
 
 						Element id = doc.createElement("id");
-						id.appendChild(doc.createTextNode(getLastMediaID(adding)-1 + ""));
+						id.appendChild(doc.createTextNode(getLastMediaID(adding) + ""));
 						media.appendChild(id);
 
 						Element title = doc.createElement("title");
@@ -423,7 +424,7 @@ public class FileManager {
 						data.appendChild(media);
 
 						Element id = doc.createElement("id");
-						id.appendChild(doc.createTextNode(getLastMediaID(adding)-1 + ""));
+						id.appendChild(doc.createTextNode(getLastMediaID(adding) + ""));
 						media.appendChild(id);
 
 						Element title = doc.createElement("title");
@@ -569,7 +570,7 @@ public class FileManager {
 
 	// A custom class to quickly get the last Media Id number
 	private static int getLastMediaID(Media reference) {
-		return reference.getTotal();
+		return reference.getMaxID();
 	}
 
 	// A quick method to create a single playlist...

@@ -21,11 +21,11 @@ class Music extends Media {
 	boolean equals(Media other) {
 		// Note: Media object may not contain all parameters such as when a Media is created for use with search.
 		// When searching, the other Media object should always be the Media that is being searched for.
-		if (other.id > 0){
+		/*if (other.id > 0){
 			if (!(this.id == other.id)){
 				return false;
 			}
-		}
+		}*/
 		if (!(other.title == null)) { //if one exists
 			if (!this.title.equalsIgnoreCase(other.title)) { //does not equals
 				return false;
